@@ -3,6 +3,13 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ReduxProvider from "@/redux/provider";
+import AuthModal from "@/components/auth/authModel";
+import RecaptchaProvider from "@/providers/RecaptchaProvider";
+import { ToastContainer } from "react-toastify";
+
+import AuthInitializer from "@/providers/AuthInitializer";
+import GLobalDialogs from "@/shared/GlobalDialogs";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,14 +32,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="">
-        <Header />
-        <main className="">{children}</main>
-        <Footer />
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body>
+        <RecaptchaProvider>
+          <ToastContainer />
+
+          <ReduxProvider>
+            <AuthInitializer />
+            <GLobalDialogs />
+            <Header />
+
+            <main>{children}</main>
+
+            <Footer />
+
+            <AuthModal />
+          </ReduxProvider>
+        </RecaptchaProvider>
       </body>
     </html>
   );

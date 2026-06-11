@@ -1,8 +1,13 @@
 "use client";
-
 import Link from "next/link";
 import { Search, ShoppingCart, Moon, Bell, Menu } from "lucide-react";
 import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { openModal } from "@/redux/slices/authModalSlice";
+import { authService } from "@/services/auth.service";
+import { toastService } from "@/utils/toast.service";
+import { logout } from "@/redux/slices/authSlice";
+import { openDialog } from "@/redux/slices/globalSlice";
 
 interface HeaderProps {
   cartCount?: number;
@@ -16,8 +21,31 @@ export default function Header({
   lang = "en",
 }: HeaderProps) {
   const [searchValue, setSearchValue] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const dispatch = useAppDispatch();
 
+  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+  const isLoggedIn = isAuthenticated;
+
+  const onLogoutClick = () => {
+    dispatch(
+      openDialog({
+        open: true,
+        message: "Are you sure you want to logout?",
+        onConfirm: handleLogout,
+      })
+    );
+  };
+
+
+
+  const handleLogout = async() => {
+    try{
+      const res=await authService.logout();
+      toastService.showToast("Logged out successfully","success");
+      dispatch(logout());
+    }catch(err){}
+
+  }
   return (
     <header className="w-full bg-white border-b border-slate-200 sticky top-0 z-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -92,19 +120,25 @@ export default function Header({
             </button>
 
             {/* User avatar */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 cursor-pointer">
+            <div
+              onClick={() => {
+                if (!isLoggedIn) {
+                  dispatch(openModal());
+                }
+              }}
+              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 cursor-pointer"
+            >
+
               {isLoggedIn ? (
                 <>
                   <span className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-900 text-sm font-semibold text-white">
-                    {userName.charAt(0).toUpperCase()}
+                    {user?.fullName?.charAt(0)?.toUpperCase()}
                   </span>
-                  <span>{userName}</span>
+
+                  <span onClick={onLogoutClick}>{user?.fullName}</span>
                 </>
               ) : (
                 <>
-                  {/* <span className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-900 text-sm font-semibold text-white">
-                    <Menu className="h-4 w-4" />
-                  </span> */}
                   <span>Sign In</span>
                 </>
               )}
