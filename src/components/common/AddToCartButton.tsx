@@ -31,6 +31,7 @@ const handleAdd = () => {
           px-6
           text-sm font-semibold
           text-white
+          cursor-pointer
           transition hover:bg-[#e65f17]
         "
         onClick={handleAdd}

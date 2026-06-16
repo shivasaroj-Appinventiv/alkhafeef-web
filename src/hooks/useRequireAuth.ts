@@ -1,7 +1,7 @@
 "use client";
 
 import { useAppDispatch } from "@/redux/hooks";
-import { openModal } from "@/redux/slices/authModalSlice";
+import { openModal, setStep } from "@/redux/slices/authModalSlice";
 import { useSession } from "next-auth/react";
 
 export function useRequireAuth() {
@@ -13,6 +13,7 @@ export function useRequireAuth() {
       return;
     }
     if (!session?.user) {
+      dispatch(setStep("LOGIN"));
       dispatch(openModal());
       return;
     }

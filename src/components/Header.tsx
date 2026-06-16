@@ -1,10 +1,10 @@
 "use client";
 import Link from "next/link";
-import { Search, ShoppingCart, Moon, Bell, Menu } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Search, ShoppingCart, Moon, Bell } from "lucide-react";
 import { useState } from "react";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { openModal } from "@/redux/slices/authModalSlice";
-import { authService } from "@/services/auth.service";
+import { useAppDispatch } from "@/redux/hooks";
+import { closeModal, openModal } from "@/redux/slices/authModalSlice";
 import { toastService } from "@/utils/toast.service";
 import { openDialog } from "@/redux/slices/globalSlice";
 import { useSession } from "next-auth/react";
@@ -24,12 +24,15 @@ export default function Header({
 }: HeaderProps) {
   const [searchValue, setSearchValue] = useState("");
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const { data: session } = useSession();
   const isLoggedIn = !!session?.user;
   const user = session?.user;
+
   const handleLogout = async () => {
-    await logoutUser();
+    dispatch(closeModal());
+    await logoutUser(router);
     dispatch(resetLoginMobileNo());
     toastService.showToast("Logged out successfully", "success");
   };

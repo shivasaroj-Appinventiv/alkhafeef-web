@@ -9,33 +9,36 @@ import OtpModal from "./otp/OtpModal";
 
 export default function AuthModal() {
   const dispatch = useAppDispatch();
-
   const { isOpen, step } = useAppSelector((state) => state.authModal);
+  const loginMobileNo = useAppSelector((state) => state.auth.loginMobileNo);
 
   if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 p-4">
-      <div className="relative w-full max-w-md rounded-3xl bg-[#F7F4EA] shadow-xl">
-        {/* Close Button */}
+  const isOtpStep = step === "OTP" && !!loginMobileNo;
 
-        <button
-          type="button"
-          onClick={() => dispatch(closeModal())}
-          className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full hover:bg-black/5 cursor-pointer"
-        >
-          <X size={20} />
-        </button>
+  return (
+    <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 p-4 backdrop-blur-[2px]">
+      <div
+        className={`relative w-full max-w-md shadow-xl ${
+          isOtpStep ? "" : "overflow-hidden rounded-3xl bg-[#F7F4EA]"
+        }`}
+      >
+        {!isOtpStep && (
+          <button
+            type="button"
+            onClick={() => dispatch(closeModal())}
+            aria-label="Close"
+            className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full hover:bg-black/5 cursor-pointer"
+          >
+            <X size={20} />
+          </button>
+        )}
 
         {step === "LOGIN" && <LoginModal />}
 
         {step === "SIGNUP" && <SignupModal />}
 
-        {step === "OTP" && (
-          <OtpModal
-            mobileNo="500000002"
-          />
-        )}
+        {isOtpStep && <OtpModal mobileNo={loginMobileNo} />}
       </div>
     </div>
   );
