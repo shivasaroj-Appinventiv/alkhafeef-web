@@ -7,6 +7,9 @@ import ReduxProvider from "@/redux/provider";
 import AuthModal from "@/components/auth/authModel";
 import RecaptchaProvider from "@/providers/RecaptchaProvider";
 import { ToastContainer } from "react-toastify";
+import { Suspense } from "react";
+import AuthSessionProvider from "@/providers/SessionProvider";
+import LoginPrompt from "@/components/auth/LoginPrompt";
 
 import AuthInitializer from "@/providers/AuthInitializer";
 import GLobalDialogs from "@/shared/GlobalDialogs";
@@ -34,7 +37,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>
-        <RecaptchaProvider>
+        {/* <RecaptchaProvider>
           <ToastContainer />
 
           <ReduxProvider>
@@ -48,6 +51,22 @@ export default function RootLayout({
 
             <AuthModal />
           </ReduxProvider>
+        </RecaptchaProvider> */}
+        <RecaptchaProvider>
+          <AuthSessionProvider>
+            <ReduxProvider>
+              <Suspense fallback={null}>
+                <LoginPrompt />
+              </Suspense>
+              <ToastContainer />
+              <GLobalDialogs />
+              <Header />
+              <main className="bg-[#f6efe5]">{children}</main>
+
+              <Footer />
+              <AuthModal />
+            </ReduxProvider>
+          </AuthSessionProvider>
         </RecaptchaProvider>
       </body>
     </html>

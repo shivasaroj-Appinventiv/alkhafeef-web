@@ -6,8 +6,10 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { openModal } from "@/redux/slices/authModalSlice";
 import { authService } from "@/services/auth.service";
 import { toastService } from "@/utils/toast.service";
-import { logout } from "@/redux/slices/authSlice";
 import { openDialog } from "@/redux/slices/globalSlice";
+import { useSession } from "next-auth/react";
+import { logoutUser } from "@/lib/auth/logout-client";
+import { resetLoginMobileNo } from "@/redux/slices/authSlice";
 
 interface HeaderProps {
   cartCount?: number;
@@ -23,8 +25,14 @@ export default function Header({
   const [searchValue, setSearchValue] = useState("");
   const dispatch = useAppDispatch();
 
-  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
-  const isLoggedIn = isAuthenticated;
+  const { data: session } = useSession();
+  const isLoggedIn = !!session?.user;
+  const user = session?.user;
+  const handleLogout = async () => {
+    await logoutUser();
+    dispatch(resetLoginMobileNo());
+    toastService.showToast("Logged out successfully", "success");
+  };
 
   const onLogoutClick = () => {
     dispatch(
@@ -37,15 +45,6 @@ export default function Header({
   };
 
 
-
-  const handleLogout = async() => {
-    try{
-      const res=await authService.logout();
-      toastService.showToast("Logged out successfully","success");
-      dispatch(logout());
-    }catch(err){}
-
-  }
   return (
     <header className="w-full bg-white border-b border-slate-200 sticky top-0 z-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

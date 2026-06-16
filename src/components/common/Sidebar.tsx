@@ -19,7 +19,11 @@ const controlItems = [
   { label: "Deactivate Profile",        href: "/profile/deactivate",    icon: UserX },
 ];
 
-export default function Sidebar() {
+interface SidebarProps {
+  user: { fullName: string; mobileNo: string; countryCode: string };
+}
+
+export default function Sidebar({ user }: SidebarProps) {
   const pathname = usePathname();
 
   return (

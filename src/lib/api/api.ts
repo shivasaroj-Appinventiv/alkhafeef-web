@@ -1,47 +1,55 @@
 import { toastService } from "@/utils/toast.service";
 import axios from "axios";
-import Cookies from "js-cookie";
+import { getSession, signOut } from "next-auth/react";
+import { API_BASE_URL, API_BASIC_AUTH, API_KEY } from "@/lib/api/config";
 
 export const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000/api",
-  timeout: 5000,
+  baseURL: API_BASE_URL,
+  timeout: 10000,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-
-
 api.interceptors.request.use(
-  (config) => {
-    config.headers["api_key"] = process.env.NEXT_PUBLIC_API_KEY;
+  async (config) => {
+    config.headers["api_key"] = API_KEY;
     config.headers["language"] = "en";
     config.headers["platform"] = "3";
-    config.headers["timezone"] = String(new Date().getTimezoneOffset() * -60 * 1000);
+    config.headers["timezone"] = String(
+      new Date().getTimezoneOffset() * -60 * 1000,
+    );
 
-    const token = Cookies.get("accessToken");
+    const existingAuth = config.headers["authorization"];
+    if (existingAuth) return config;
+
+    const session = await getSession();
+    const token = session?.accessToken;
+
     if (token) {
-      config.headers["authorization"] = `Bearer ${token}`
-    }else{
-    config.headers["authorization"] = `Basic ${process.env.NEXT_PUBLIC_BASIC_AUTH}`;
-
+      config.headers["authorization"] = `Bearer ${token}`;
+    } else {
+      config.headers["authorization"] = `Basic ${API_BASIC_AUTH}`;
     }
 
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
-    const message = error?.response?.data?.message || "Something went wrong";
-    toastService.showToast(message, "error");
-    if (error?.response?.status === 401) {
-      Cookies.remove("accessToken");
+  async (error) => {
+    const isLogoutRequest = error.config?.url?.includes("/logout");
+
+    if (!isLogoutRequest) {
+      const message = error?.response?.data?.message || "Something went wrong";
+      toastService.showToast(message, "error");
     }
 
-    // toast.error(message);
+    if (error?.response?.status === 401 && !isLogoutRequest) {
+      await signOut({ redirect: false });
+    }
 
     return Promise.reject(error);
   },

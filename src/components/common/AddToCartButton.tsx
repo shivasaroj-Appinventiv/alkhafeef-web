@@ -1,5 +1,6 @@
 "use client";
 
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { Minus, Plus } from "lucide-react";
 
 interface AddToCartButtonProps {
@@ -10,6 +11,16 @@ interface AddToCartButtonProps {
 }
 
 export default function AddToCartButton() {
+  const { requireAuth } = useRequireAuth();
+
+const handleAdd = () => {
+  requireAuth(() => {
+    // cart logic here
+  });
+};
+
+
+  
   const quantity=0;
   if (quantity === 0) {
     return (
@@ -22,6 +33,7 @@ export default function AddToCartButton() {
           text-white
           transition hover:bg-[#e65f17]
         "
+        onClick={handleAdd}
       >
         Add To Cart
       </button>
