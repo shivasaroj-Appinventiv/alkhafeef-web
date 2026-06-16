@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 
 const menuItems = [
-  { label: "Order",     href: "/profile/order",    icon: ClipboardList },
+  { label: "Order",     href: "/profile/orders",    icon: ClipboardList },
   { label: "Payments",  href: "/profile/payments",  icon: CreditCard },
   { label: "Favorites", href: "/profile/favorites", icon: Heart },
   { label: "My Offers", href: "/profile/offers",    icon: Gift },
@@ -92,7 +92,7 @@ export default function Sidebar() {
               {label}
             </Link>
           ))}
-          <button className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-white/85 transition hover:bg-white/10">
+          <button className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-white/85 transition hover:bg-white/10 cursor-pointer">
             <LogOut size={16} />
             Logout
           </button>
