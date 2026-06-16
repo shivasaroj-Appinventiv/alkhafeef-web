@@ -1,15 +1,10 @@
 "use client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { Search, ShoppingCart, Moon, Bell } from "lucide-react";
 import { useState } from "react";
 import { useAppDispatch } from "@/redux/hooks";
-import { closeModal, openModal } from "@/redux/slices/authModalSlice";
-import { toastService } from "@/utils/toast.service";
-import { openDialog } from "@/redux/slices/globalSlice";
+import { openModal, setStep } from "@/redux/slices/authModalSlice";
 import { useSession } from "next-auth/react";
-import { logoutUser } from "@/lib/auth/logout-client";
-import { resetLoginMobileNo } from "@/redux/slices/authSlice";
 
 interface HeaderProps {
   cartCount?: number;
@@ -24,29 +19,14 @@ export default function Header({
 }: HeaderProps) {
   const [searchValue, setSearchValue] = useState("");
   const dispatch = useAppDispatch();
-  const router = useRouter();
 
   const { data: session } = useSession();
   const isLoggedIn = !!session?.user;
   const user = session?.user;
-
-  const handleLogout = async () => {
-    dispatch(closeModal());
-    await logoutUser(router);
-    dispatch(resetLoginMobileNo());
-    toastService.showToast("Logged out successfully", "success");
-  };
-
-  const onLogoutClick = () => {
-    dispatch(
-      openDialog({
-        open: true,
-        message: "Are you sure you want to logout?",
-        onConfirm: handleLogout,
-      })
-    );
-  };
-
+  const handleLogin = () =>{
+    dispatch(setStep("LOGIN"));
+    dispatch(openModal());
+  }
 
   return (
     <header className="w-full bg-white border-b border-slate-200 sticky top-0 z-50">
@@ -121,30 +101,25 @@ export default function Header({
               {lang === "en" ? "English" : "العربية"}
             </button>
 
-            {/* User avatar */}
-            <div
-              onClick={() => {
-                if (!isLoggedIn) {
-                  dispatch(openModal());
-                }
-              }}
-              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 cursor-pointer"
-            >
-
-              {isLoggedIn ? (
-                <>
-                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-900 text-sm font-semibold text-white">
-                    {user?.fullName?.charAt(0)?.toUpperCase()}
-                  </span>
-
-                  <span onClick={onLogoutClick}>{user?.fullName}</span>
-                </>
-              ) : (
-                <>
-                  <span>Sign In</span>
-                </>
-              )}
-            </div>
+            {isLoggedIn ? (
+              <Link
+                href="/profile/orders"
+                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50"
+              >
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-900 text-sm font-semibold text-white">
+                  {user?.fullName?.charAt(0)?.toUpperCase()}
+                </span>
+                <span>{user?.fullName}</span>
+              </Link>
+            ) : (
+              <button
+                type="button"
+                onClick={handleLogin}
+                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 cursor-pointer"
+              >
+                Sign In
+              </button>
+            )}
 
             {/* Notifications */}
             {isLoggedIn && (

@@ -33,14 +33,18 @@ export default function HomeCarousels({ slides }: BannerCarouselProps) {
     };
   }, [emblaApi]);
 
-  if (!slides?.length) return null;
+  const validSlides = slides.filter((slide) => slide.imageEnUrl?.trim());
+  if (!validSlides.length) return null;
 
   return (
     <div className="w-full mx-auto font-sans select-none">
       {/* Embla viewport */}
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex">
-          {slides.map((slide) => (
+          {validSlides.map((slide) => {
+            const imageSrc = slide.imageEnUrl.trim();
+
+            return (
             <div
               key={slide._id}
               className="flex-[0_0_100%] min-w-0 relative overflow-hidden bg-[#e8c9b0]"
@@ -49,7 +53,7 @@ export default function HomeCarousels({ slides }: BannerCarouselProps) {
               {/* Full background image */}
 
               <Image
-                src={slide.imageEnUrl}
+                src={imageSrc}
                 alt={slide.titleEnglish}
                 fill
                 className="absolute inset-0 w-full h-full object-cover"
@@ -84,7 +88,8 @@ export default function HomeCarousels({ slides }: BannerCarouselProps) {
                 </button>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
@@ -92,7 +97,7 @@ export default function HomeCarousels({ slides }: BannerCarouselProps) {
       <div className="flex items-center gap-3 mt-4 px-1">
         {/* Dots */}
         <div className="flex items-center gap-2 flex-1">
-          {slides.map((_, i) => (
+          {validSlides.map((_, i) => (
             <button
               key={i}
               onClick={() => scrollTo(i)}
@@ -107,7 +112,7 @@ export default function HomeCarousels({ slides }: BannerCarouselProps) {
         {/* Counter */}
         <span className="text-xs font-medium text-gray-400 tracking-widest">
           {String(selectedIndex + 1).padStart(2, "0")} /{" "}
-          {String(slides.length).padStart(2, "0")}
+          {String(validSlides.length).padStart(2, "0")}
         </span>
 
         {/* Arrows */}

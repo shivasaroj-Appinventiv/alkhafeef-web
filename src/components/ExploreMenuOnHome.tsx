@@ -46,7 +46,10 @@ export default function ExploreMenuOnHome({ menus }: ExploreMenuOnHomeProps) {
         </div>
 
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          {visibleMenus.map((menu) => (
+          {visibleMenus.map((menu) => {
+            const menuImageSrc = menu.menuImageUrl?.trim();
+
+            return (
             <Link key={menu._id} href={`/explore-menu/${menu._id}`}>
               <article
                 key={menu._id}
@@ -67,18 +70,21 @@ export default function ExploreMenuOnHome({ menus }: ExploreMenuOnHomeProps) {
                   )}
                 </div>
 
-                <div className="absolute inset-x-0 bottom-0 h-36 pointer-events-none">
-                  <Image
-                    src={menu.menuImageUrl}
-                    alt={menu.titleEnglish}
-                    fill
-                    sizes="(max-width: 768px) 50vw, 25vw"
-                    className="object-cover object-top"
-                  />
-                </div>
+                {menuImageSrc ? (
+                  <div className="absolute inset-x-0 bottom-0 h-36 pointer-events-none">
+                    <Image
+                      src={menuImageSrc}
+                      alt={menu.titleEnglish}
+                      fill
+                      sizes="(max-width: 768px) 50vw, 25vw"
+                      className="object-cover object-top"
+                    />
+                  </div>
+                ) : null}
               </article>
             </Link>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

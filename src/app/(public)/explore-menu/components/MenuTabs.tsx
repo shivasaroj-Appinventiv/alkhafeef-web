@@ -12,6 +12,7 @@ export default  function MenuTabs({ menus }: ExploreMenuOnHomeProps) {
       <div className="flex min-w-max gap-3 pb-2">
         {menus.map((menu) => {
           const active = menu._id === activeCategoryId;
+          const menuImageSrc = menu.menuImageUrl?.trim();
 
           return (
             <Link
@@ -26,15 +27,17 @@ export default  function MenuTabs({ menus }: ExploreMenuOnHomeProps) {
                 }
               `}
             >
-              <div className="relative h-10 w-10 shrink-0">
-                <Image
-                  src={menu.menuImageUrl}
-                  alt={menu.titleEnglish}
-                  sizes="40px"
-                  fill
-                  className="object-contain"
-                />
-              </div>
+              {menuImageSrc ? (
+                <div className="relative h-10 w-10 shrink-0">
+                  <Image
+                    src={menuImageSrc}
+                    alt={menu.titleEnglish}
+                    sizes="40px"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+              ) : null}
 
               <span className="truncate text-sm font-medium">
                 {menu.titleEnglish}

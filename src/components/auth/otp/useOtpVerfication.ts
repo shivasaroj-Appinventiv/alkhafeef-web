@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import { authService } from "@/services/auth.service";
 import { toastService } from "@/utils/toast.service";
 import { useAppDispatch } from "@/redux/hooks";
@@ -43,7 +43,13 @@ export const useOtpVerification = (mobileNo: string) => {
         deviceToken: "123",
       });
 
-      if (result?.error) {
+      if (result?.error || result?.code === "credentials") {
+        toastService.showToast("Invalid OTP", "error");
+        return;
+      }
+
+      const session = await getSession();
+      if (!session?.accessToken) {
         toastService.showToast("Invalid OTP", "error");
         return;
       }

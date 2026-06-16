@@ -9,6 +9,8 @@ interface Props {
 }
 
 export default function ItemCard({ item }: Props) {
+  const imageSrc = item.itemImageUrl?.trim();
+
   return (
     <article
       className="
@@ -25,18 +27,20 @@ export default function ItemCard({ item }: Props) {
       {/* Image Section */}
       <div className="relative p-3">
         <div className="relative h-[200px] rounded-2xl bg-[#f7f2ea]">
-          <Image
-            src={item.itemImageUrl}
-            alt={item.nameEnglish}
-            fill
-            sizes="(max-width:768px) 100vw, 25vw"
-            className="
-              object-contain
-              p-4
-              transition-transform duration-300
-              group-hover:scale-105
-            "
-          />
+          {imageSrc ? (
+            <Image
+              src={imageSrc}
+              alt={item.nameEnglish}
+              fill
+              sizes="(max-width:768px) 100vw, 25vw"
+              className="
+                object-contain
+                p-4
+                transition-transform duration-300
+                group-hover:scale-105
+              "
+            />
+          ) : null}
 
           <FavoriteButton />
         </div>

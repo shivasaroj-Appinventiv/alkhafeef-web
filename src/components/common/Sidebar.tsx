@@ -18,6 +18,7 @@ import { toastService } from "@/utils/toast.service";
 import { useAppDispatch } from "@/redux/hooks";
 import { closeModal } from "@/redux/slices/authModalSlice";
 import { resetLoginMobileNo } from "@/redux/slices/authSlice";
+import { openDialog } from "@/redux/slices/globalSlice";
 
 interface SidebarProps {
   user: { fullName: string; mobileNo: string; countryCode: string };
@@ -56,6 +57,16 @@ export default function Sidebar({ user }: SidebarProps) {
     await logoutUser(router);
     dispatch(resetLoginMobileNo());
     toastService.showToast("Logged out successfully", "success");
+  };
+
+  const onLogoutClick = () => {
+    dispatch(
+      openDialog({
+        open: true,
+        message: "Are you sure you want to logout?",
+        onConfirm: handleLogout,
+      })
+    );
   };
 
   return (
@@ -126,7 +137,7 @@ export default function Sidebar({ user }: SidebarProps) {
           ))}
           <button
             type="button"
-            onClick={handleLogout}
+            onClick={onLogoutClick}
             className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-white/85 transition hover:bg-white/10 cursor-pointer"
           >
             <LogOut size={16} />

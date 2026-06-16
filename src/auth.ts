@@ -37,7 +37,8 @@ export const authConfig = {
     maxAge: 7 * 24 * 60 * 60,
   },
   pages: {
-    signIn: "/?login=1",
+    // Must not include query params — Auth.js appends ?error=... and breaks parsing otherwise.
+    signIn: "/",
   },
   callbacks: {
     async jwt({ token, user, trigger }) {
