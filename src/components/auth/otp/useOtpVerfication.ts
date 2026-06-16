@@ -1,21 +1,20 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { signIn } from "next-auth/react";
 import { authService } from "@/services/auth.service";
 import { toastService } from "@/utils/toast.service";
 import { useAppDispatch } from "@/redux/hooks";
 import { closeModal, setStep } from "@/redux/slices/authModalSlice";
-import { LoginOTPVerificationPayload } from "../auth.interface";
-import { attachDeviceID } from "@/hooks/useDeviceId";
 import { resetLoginMobileNo } from "@/redux/slices/authSlice";
-import { signIn } from "next-auth/react";
+import { attachDeviceID } from "@/hooks/useDeviceId";
 
 interface VerifyOtpPayload {
   mobileOtp: string;
   mobileNo: string;
 }
 
-export const useOtpVerification = async(mobileNo: string) => {
+export const useOtpVerification = (mobileNo: string) => {
   const dispatch = useAppDispatch();
 
   const [seconds, setSeconds] = useState(120);
@@ -30,22 +29,37 @@ export const useOtpVerification = async(mobileNo: string) => {
     return () => clearInterval(interval);
   }, [seconds]);
 
-  const result = await signIn("otp", {
-    redirect: false,
-    mobileNo,
-    mobileOtp: mobileOtp.mobileOtp,
-    countryCode: "966",
-    deviceId: attachDeviceID().toString(),
-    deviceToken: "123",
-  });
-  if (result?.error) {
-    toastService.showToast("Invalid OTP", "error");
-    return;
-  }
-  toastService.showToast("Login Successful", "success");
-  dispatch(resetLoginMobileNo());
-  dispatch(setStep("LOGIN"));
-  dispatch(closeModal());
+  const verifyOtp = async (
+    mobileOtp: VerifyOtpPayload,
+    setSubmitting: (value: boolean) => void,
+  ) => {
+    try {
+      const result = await signIn("otp", {
+        redirect: false,
+        mobileNo,
+        mobileOtp: mobileOtp.mobileOtp,
+        countryCode: "966",
+        deviceId: attachDeviceID().toString(),
+        deviceToken: "123",
+      });
+
+      if (result?.error) {
+        toastService.showToast("Invalid OTP", "error");
+        return;
+      }
+
+      toastService.showToast("Login Successful", "success");
+      dispatch(resetLoginMobileNo());
+      dispatch(setStep("LOGIN"));
+      dispatch(closeModal());
+    } catch (error) {
+      console.error(error);
+      toastService.showToast("Invalid OTP", "error");
+      throw error;
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const resendOtp = async () => {
     try {
@@ -55,7 +69,6 @@ export const useOtpVerification = async(mobileNo: string) => {
       });
 
       toastService.showToast("OTP Resent Successfully", "success");
-
       setSeconds(120);
     } catch (error) {
       console.error(error);
