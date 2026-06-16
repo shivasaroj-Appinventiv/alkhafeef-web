@@ -1,4 +1,5 @@
 import { FetchMenuOptions, MenuData, MenuResponse } from "@/types/menu";
+import { cache } from "react";
 
 const API_BASE_URL = "https://api-dev.alkhafeef.com.sa/userStore/api/v1";
 
@@ -38,9 +39,35 @@ export async function fetchMenList(): Promise<MenuData[]> {
   }
 
   const data: MenuResponse = await response.json();
+  console.log(data);
 
   if (!data.data || !Array.isArray(data.data)) {
     throw new Error("Invalid menu response structure");
   }
   return data.data;
 }
+
+export const getMenuItemList = cache(
+  async (categoryId: string, userId?: string) => {
+    const params = new URLSearchParams({
+      menuId: categoryId,
+    });
+
+    if (userId) {
+      params.append("userId", userId);
+    }
+
+    const url = `${API_BASE_URL}/menuItemList?${params.toString()}`;
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: getHeaders(),
+      next: { revalidate: 3600 },
+    });
+
+    
+    const result = await response.json();
+
+        return result.data ?? [];
+  },
+);

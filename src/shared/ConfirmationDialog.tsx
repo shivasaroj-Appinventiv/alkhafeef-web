@@ -32,7 +32,7 @@ const ConfirmationDialog = ({
           <button
             type="button"
             onClick={onCancel}
-            className="h-9 rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-600 transition hover:bg-gray-50"
+            className="h-9 rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-600 transition hover:bg-gray-50 cursor-pointer"
           >
             Cancel
           </button>
@@ -40,7 +40,7 @@ const ConfirmationDialog = ({
           <button
             type="button"
             onClick={onConfirm}
-            className="h-9 rounded-lg bg-red-500 px-4 text-sm font-medium text-white transition hover:bg-red-700"
+            className="h-9 rounded-lg bg-red-500 px-4 text-sm font-medium text-white transition hover:bg-red-700 cursor-pointer"
           >
             Confirm
           </button>

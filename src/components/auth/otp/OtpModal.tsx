@@ -134,6 +134,7 @@ export default function OTPModal({
                 text-white
                 transition
                 hover:bg-[#e79260]
+                cursor-pointer
                 disabled:opacity-50
                 disabled:cursor-not-allowed
               "

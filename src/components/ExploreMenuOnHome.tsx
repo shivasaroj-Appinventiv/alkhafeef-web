@@ -1,9 +1,8 @@
 import Image from "next/image";
-import { MenuData } from "@/types/menu";
+import { ExploreMenuOnHomeProps, MenuData } from "@/types/menu";
+import Link from "next/link";
 
-interface ExploreMenuOnHomeProps {
-  menus: MenuData[];
-}
+
 
 function ArrowIcon() {
   return (
@@ -25,8 +24,10 @@ function ArrowIcon() {
 }
 
 export default function ExploreMenuOnHome({ menus }: ExploreMenuOnHomeProps) {
+  console.log(menus);
+
   const visibleMenus = [...menus]
-    .filter((menu) => menu._id && menu.titleEnglish && menu.menuImageUrl)
+    .filter((menu) => menu._id && menu.titleEnglish)
     .sort((a, b) => a.displayOrder - b.displayOrder);
 
   if (!visibleMenus.length) return null;
@@ -46,35 +47,37 @@ export default function ExploreMenuOnHome({ menus }: ExploreMenuOnHomeProps) {
 
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           {visibleMenus.map((menu) => (
-            <article
-              key={menu._id}
-              className="group relative flex h-52 flex-col justify-between overflow-hidden rounded-2xl bg-white p-4 text-left text-[#1a1a1a] shadow-xl transition duration-200 hover:-translate-y-1 hover:bg-[#e05c2a] hover:text-white md:h-56 cursor-pointer"
-            >
-              <div className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-gray-100 bg-white text-[#333] shadow-sm transition group-hover:border-[#c94d1e] group-hover:bg-[#c94d1e] group-hover:text-white">
-                <ArrowIcon />
-              </div>
+            <Link key={menu._id} href={`/explore-menu/${menu._id}`}>
+              <article
+                key={menu._id}
+                className="group relative flex h-52 flex-col justify-between overflow-hidden rounded-2xl bg-white p-4 text-left text-[#1a1a1a] shadow-xl transition duration-200 hover:-translate-y-1 hover:bg-[#e05c2a] hover:text-white md:h-56 cursor-pointer"
+              >
+                <div className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-gray-100 bg-white text-[#333] shadow-sm transition group-hover:border-[#c94d1e] group-hover:bg-[#c94d1e] group-hover:text-white">
+                  <ArrowIcon />
+                </div>
 
-              <div className="relative z-10 pr-9">
-                <h3 className="text-lg font-bold leading-tight">
-                  {menu.titleEnglish}
-                </h3>
-                {menu.itemCount > 0 && (
-                  <p className="mt-1 text-xs font-medium text-[#2d6e5e]/80 transition group-hover:text-white/80">
-                    {menu.itemCount} items
-                  </p>
-                )}
-              </div>
+                <div className="relative z-10 pr-9">
+                  <h3 className="text-lg font-bold leading-tight">
+                    {menu.titleEnglish}
+                  </h3>
+                  {menu.itemCount > 0 && (
+                    <p className="mt-1 text-xs font-medium text-[#2d6e5e]/80 transition group-hover:text-white/80">
+                      {menu.itemCount} items
+                    </p>
+                  )}
+                </div>
 
-              <div className="absolute inset-x-0 bottom-0 h-36 pointer-events-none">
-                <Image
-                  src={menu.menuImageUrl}
-                  alt={menu.titleEnglish}
-                  fill
-                  sizes="(max-width: 768px) 50vw, 25vw"
-                  className="object-cover object-top"
-                />
-              </div>
-            </article>
+                <div className="absolute inset-x-0 bottom-0 h-36 pointer-events-none">
+                  <Image
+                    src={menu.menuImageUrl}
+                    alt={menu.titleEnglish}
+                    fill
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                    className="object-cover object-top"
+                  />
+                </div>
+              </article>
+            </Link>
           ))}
         </div>
       </div>

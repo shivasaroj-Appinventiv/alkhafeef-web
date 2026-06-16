@@ -22,3 +22,113 @@ export interface FetchMenuOptions {
   lang?: "en" | "ar";
   revalidate?: number;
 }
+
+export interface ExploreMenuOnHomeProps {
+  menus: MenuData[];
+}
+
+export interface MenuItem {
+  _id: string;
+
+  itemId: number;
+  menuId: string;
+
+  nameEnglish: string;
+  nameArabic: string;
+
+  titleEnglish: string;
+  titleArabic: string;
+
+  descriptionEnglish: string;
+  descriptionArabic: string;
+
+  itemImageUrl: string;
+  mediaType: string;
+  calories: number;
+  price: number;
+
+  isAvailable: boolean;
+  isCustomised: boolean;
+  isOfferExcluded: boolean;
+  isTimeRangeSet: boolean;
+
+  servicesAvailable: string;
+
+  allergicComponent: string[];
+  excludeLocations: string[];
+  timeRange: string[];
+
+  nutritionArabic: string;
+  nutritionEnglish: string;
+
+  stampStartDate: number;
+  stampEndDate: number;
+  stampFromTime: number;
+  stampToTime: number;
+}
+
+export interface NutritionInfo {
+  physical_activity_to_burn: {
+    value: number;
+    unit: string;
+  };
+
+  cholesterol: {
+    value: number;
+    unit: string;
+  };
+
+  fiber: {
+    value: number;
+    unit: string;
+  };
+
+  full_fat: {
+    value: number;
+    unit: string;
+  };
+
+  saturated_fat: {
+    value: number;
+    unit: string;
+  };
+
+  trans_fat: {
+    value: number;
+    unit: string;
+  };
+
+  salt: {
+    value: number;
+    unit: string;
+  };
+
+  added_suger: {
+    value: number;
+    unit: string;
+  };
+
+  total_suger: {
+    value: number;
+    unit: string;
+  };
+
+  carbohydrates: {
+    value: number;
+    unit: string;
+  };
+
+  protein: {
+    value: number;
+    unit: string;
+  };
+
+  sodium: {
+    value: number;
+    unit: string;
+  };
+
+  is_extra_salt: {
+    value: boolean;
+  };
+}

@@ -42,7 +42,7 @@ export default function RootLayout({
             <GLobalDialogs />
             <Header />
 
-            <main>{children}</main>
+            <main className="bg-[#f6efe5]">{children}</main>
 
             <Footer />
 
