@@ -38,7 +38,7 @@ export default function ItemCard({ item }: Props) {
             "
           />
 
-          <FavoriteButton />
+          <FavoriteButton itemId={item._id} />
         </div>
       </div>
 
@@ -73,7 +73,7 @@ export default function ItemCard({ item }: Props) {
             </h4>
           </div>
 
-          <AddToCartButton />
+          <AddToCartButton itemId={item._id} />
         </div>
 
         {item.isCustomised && (

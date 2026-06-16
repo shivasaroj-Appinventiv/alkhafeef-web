@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ReduxProvider from "@/redux/provider";
 import AuthModal from "@/components/auth/authModel";
 import RecaptchaProvider from "@/providers/RecaptchaProvider";
+import AuthSessionProvider from "@/providers/SessionProvider";
+import LoginPrompt from "@/components/auth/LoginPrompt";
 import { ToastContainer } from "react-toastify";
-
-import AuthInitializer from "@/providers/AuthInitializer";
 import GLobalDialogs from "@/shared/GlobalDialogs";
 
 const geistSans = Geist({
@@ -35,19 +36,19 @@ export default function RootLayout({
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>
         <RecaptchaProvider>
-          <ToastContainer />
-
-          <ReduxProvider>
-            <AuthInitializer />
-            <GLobalDialogs />
-            <Header />
-
-            <main className="bg-[#f6efe5]">{children}</main>
-
-            <Footer />
-
-            <AuthModal />
-          </ReduxProvider>
+          <AuthSessionProvider>
+            <ReduxProvider>
+              <Suspense fallback={null}>
+                <LoginPrompt />
+              </Suspense>
+              <ToastContainer />
+              <GLobalDialogs />
+              <Header />
+              <main className="bg-[#f6efe5]">{children}</main>
+              <Footer />
+              <AuthModal />
+            </ReduxProvider>
+          </AuthSessionProvider>
         </RecaptchaProvider>
       </body>
     </html>

@@ -1,18 +1,34 @@
 "use client";
 
+import { useState } from "react";
 import { Heart } from "lucide-react";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
+import { toastService } from "@/utils/toast.service";
 
 interface FavoriteButtonProps {
-  isFavorite: boolean;
-  isLoading?: boolean;
-  onToggle: () => void;
+  itemId: string;
 }
 
-export default function FavoriteButton() {
-  const isFavorite=true;
+export default function FavoriteButton({ itemId }: FavoriteButtonProps) {
+  const { requireAuth } = useRequireAuth();
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const handleToggle = () => {
+    requireAuth(() => {
+      setIsFavorite((current) => !current);
+      toastService.showToast(
+        isFavorite ? "Removed from favorites" : "Added to favorites",
+        "success",
+      );
+      // TODO: call favorites API with itemId when backend is ready
+      void itemId;
+    });
+  };
+
   return (
     <button
-    
+      type="button"
+      onClick={handleToggle}
       className="
         absolute right-3 top-3 z-10
         flex h-10 w-10 items-center justify-center

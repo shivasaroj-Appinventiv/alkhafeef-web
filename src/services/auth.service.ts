@@ -1,5 +1,6 @@
 import { LoginOTPVerificationPayload } from "@/components/auth/auth.interface";
 import { api } from "@/lib/api/api";
+import { API_RSA_PUBLIC_KEY } from "@/lib/api/config";
 import { encryptTimestamp } from "@/utils/encryption";
 
 export const authService = {
@@ -8,9 +9,7 @@ export const authService = {
     countryCode: string;
     token: string;
   }) {
-    const xValidation = await encryptTimestamp(
-      process.env.NEXT_PUBLIC_RSA_PUBLIC_KEY!,
-    );
+    const xValidation = await encryptTimestamp(API_RSA_PUBLIC_KEY || undefined);
 
     return api.post("/userOnboard/api/v1/login", payload, {
       headers: {
@@ -32,6 +31,12 @@ export const authService = {
   },
 
   async logout() {
-    return api.post("/userOnboard/api/v1/logout");
+    const response = await fetch("/api/auth/logout", { method: "POST" });
+
+    if (!response.ok) {
+      throw new Error("Logout failed");
+    }
+
+    return response;
   },
 };

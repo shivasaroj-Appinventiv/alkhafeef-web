@@ -9,16 +9,14 @@ import OtpModal from "./otp/OtpModal";
 
 export default function AuthModal() {
   const dispatch = useAppDispatch();
-
   const { isOpen, step } = useAppSelector((state) => state.authModal);
+  const loginMobileNo = useAppSelector((state) => state.auth.loginMobileNo);
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 p-4">
       <div className="relative w-full max-w-md rounded-3xl bg-[#F7F4EA] shadow-xl">
-        {/* Close Button */}
-
         <button
           type="button"
           onClick={() => dispatch(closeModal())}
@@ -31,10 +29,8 @@ export default function AuthModal() {
 
         {step === "SIGNUP" && <SignupModal />}
 
-        {step === "OTP" && (
-          <OtpModal
-            mobileNo="500000002"
-          />
+        {step === "OTP" && loginMobileNo && (
+          <OtpModal mobileNo={loginMobileNo} />
         )}
       </div>
     </div>

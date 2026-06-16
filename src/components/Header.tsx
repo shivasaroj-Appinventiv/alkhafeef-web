@@ -1,56 +1,50 @@
 "use client";
+
 import Link from "next/link";
-import { Search, ShoppingCart, Moon, Bell, Menu } from "lucide-react";
+import { Search, ShoppingCart, Moon, Bell } from "lucide-react";
 import { useState } from "react";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useSession } from "next-auth/react";
+import { useAppDispatch } from "@/redux/hooks";
 import { openModal } from "@/redux/slices/authModalSlice";
-import { authService } from "@/services/auth.service";
 import { toastService } from "@/utils/toast.service";
-import { logout } from "@/redux/slices/authSlice";
 import { openDialog } from "@/redux/slices/globalSlice";
+import { resetLoginMobileNo } from "@/redux/slices/authSlice";
+import { logoutUser } from "@/lib/auth/logout-client";
 
 interface HeaderProps {
   cartCount?: number;
-  userName?: string;
   lang?: "en" | "ar";
 }
 
-export default function Header({
-  cartCount = 0,
-  userName = "Test",
-  lang = "en",
-}: HeaderProps) {
+export default function Header({ cartCount = 0, lang = "en" }: HeaderProps) {
   const [searchValue, setSearchValue] = useState("");
   const dispatch = useAppDispatch();
+  const { data: session } = useSession();
 
-  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
-  const isLoggedIn = isAuthenticated;
+  const isLoggedIn = !!session?.user;
+  const user = session?.user;
 
-  const onLogoutClick = () => {
+  const onLogoutClick = (event: React.MouseEvent) => {
+    event.stopPropagation();
     dispatch(
       openDialog({
         open: true,
         message: "Are you sure you want to logout?",
         onConfirm: handleLogout,
-      })
+      }),
     );
   };
 
+  const handleLogout = async () => {
+    await logoutUser();
+    dispatch(resetLoginMobileNo());
+    toastService.showToast("Logged out successfully", "success");
+  };
 
-
-  const handleLogout = async() => {
-    try{
-      const res=await authService.logout();
-      toastService.showToast("Logged out successfully","success");
-      dispatch(logout());
-    }catch(err){}
-
-  }
   return (
     <header className="w-full bg-white border-b border-slate-200 sticky top-0 z-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-4 py-4 lg:flex-row lg:items-center lg:justify-between">
-          {/* Logo */}
           <Link href="/" className="flex items-center gap-3 shrink-0">
             <div className="flex h-12 w-12 items-center justify-center rounded-3xl bg-emerald-950 text-white shadow-sm">
               <svg
@@ -74,7 +68,6 @@ export default function Header({
             </div>
           </Link>
 
-          {/* Search */}
           <div className="w-full flex-1">
             <label htmlFor="site-search" className="sr-only">
               Search Item
@@ -94,10 +87,7 @@ export default function Header({
             </div>
           </div>
 
-          {/* Right actions */}
           <div className="flex flex-wrap items-center justify-end gap-3">
-            {/* Cart */}
-
             {isLoggedIn && (
               <Link
                 href="/cart"
@@ -113,13 +103,11 @@ export default function Header({
               </Link>
             )}
 
-            {/* Language toggle */}
             <button className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50">
               <Moon className="h-4 w-4" />
               {lang === "en" ? "English" : "العربية"}
             </button>
 
-            {/* User avatar */}
             <div
               onClick={() => {
                 if (!isLoggedIn) {
@@ -128,27 +116,24 @@ export default function Header({
               }}
               className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 cursor-pointer"
             >
-
               {isLoggedIn ? (
                 <>
-                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-900 text-sm font-semibold text-white">
+                  <Link
+                    href="/profile/orders"
+                    className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-900 text-sm font-semibold text-white"
+                  >
                     {user?.fullName?.charAt(0)?.toUpperCase()}
-                  </span>
-
+                  </Link>
                   <span onClick={onLogoutClick}>{user?.fullName}</span>
                 </>
               ) : (
-                <>
-                  <span>Sign In</span>
-                </>
+                <span>Sign In</span>
               )}
             </div>
 
-            {/* Notifications */}
             {isLoggedIn && (
               <button className="relative inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 transition hover:border-slate-300 hover:bg-slate-50">
                 <Bell className="h-5 w-5" />
-                {/* Unread dot */}
                 <span className="absolute top-2 right-2.5 h-2 w-2 rounded-full bg-[#e05c2a]" />
               </button>
             )}

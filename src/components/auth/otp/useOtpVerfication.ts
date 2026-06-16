@@ -1,14 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { signIn } from "next-auth/react";
 import { authService } from "@/services/auth.service";
 import { toastService } from "@/utils/toast.service";
 import { useAppDispatch } from "@/redux/hooks";
 import { closeModal, setStep } from "@/redux/slices/authModalSlice";
-import { LoginOTPVerificationPayload } from "../auth.interface";
+import { resetLoginMobileNo } from "@/redux/slices/authSlice";
 import { attachDeviceID } from "@/hooks/useDeviceId";
-import { setCredentials } from "@/redux/slices/authSlice";
-import Cookies from "js-cookie";
 
 interface VerifyOtpPayload {
   mobileOtp: string;
@@ -35,33 +34,27 @@ export const useOtpVerification = (mobileNo: string) => {
     setSubmitting: (value: boolean) => void,
   ) => {
     try {
-      const payload: LoginOTPVerificationPayload = {
+      const result = await signIn("otp", {
+        redirect: false,
+        mobileNo,
+        mobileOtp: mobileOtp.mobileOtp,
         countryCode: "966",
         deviceId: attachDeviceID().toString(),
         deviceToken: "123",
-        mobileNo: mobileNo,
-        mobileOtp: mobileOtp.mobileOtp,
-      };
-      const response = await authService.verifyOtp(payload);
+      });
 
-      const { accessToken, ...userData } = response.data.data; // ✅ destructure correctly
-      Cookies.set("accessToken", accessToken, { expires: 7 ,path: "/" });
-      dispatch(
-        setCredentials({
-          user: userData,
-          token: accessToken,
-        }),
-      );
+      if (result?.error) {
+        toastService.showToast("Invalid OTP", "error");
+        return;
+      }
+
       toastService.showToast("Login Successful", "success");
+      dispatch(resetLoginMobileNo());
       dispatch(setStep("LOGIN"));
       dispatch(closeModal());
-
-      return response;
     } catch (error) {
       console.error(error);
-
       toastService.showToast("Invalid OTP", "error");
-
       throw error;
     } finally {
       setSubmitting(false);
@@ -76,7 +69,6 @@ export const useOtpVerification = (mobileNo: string) => {
       });
 
       toastService.showToast("OTP Resent Successfully", "success");
-
       setSeconds(120);
     } catch (error) {
       console.error(error);
