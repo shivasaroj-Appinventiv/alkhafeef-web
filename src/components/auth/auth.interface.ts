@@ -3,9 +3,13 @@ export interface LoginPayload {
 }
 
 export interface SignupPayload {
-  name: string;
-  email: string;
-  phone: string;
+    fullName: string;
+    email: string;
+    mobileNo: string;
+    countryCode: string;
+    deviceId: string;
+    deviceToken: string;
+    token: string;
 }
 
 export interface LoginOTPVerificationPayload {

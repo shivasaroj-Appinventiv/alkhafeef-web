@@ -2,19 +2,17 @@
 import Link from "next/link";
 import { Search, ShoppingCart, Moon, Bell } from "lucide-react";
 import { useState } from "react";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { openModal, setStep } from "@/redux/slices/authModalSlice";
 import { useSession } from "next-auth/react";
+import { selectCartCount } from "@/redux/slices/cartSlice";
 
 interface HeaderProps {
-  cartCount?: number;
   userName?: string;
   lang?: "en" | "ar";
 }
 
 export default function Header({
-  cartCount = 0,
-  userName = "Test",
   lang = "en",
 }: HeaderProps) {
   const [searchValue, setSearchValue] = useState("");
@@ -27,7 +25,7 @@ export default function Header({
     dispatch(setStep("LOGIN"));
     dispatch(openModal());
   }
-
+  const cartCount = useAppSelector(selectCartCount);
   return (
     <header className="w-full bg-white border-b border-slate-200 sticky top-0 z-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

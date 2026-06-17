@@ -1,8 +1,9 @@
 "use client";
 
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setStep } from "@/redux/slices/authModalSlice";
-import { setLoginMobileNo } from "@/redux/slices/authSlice";
+import { resetLoginMobileNo, resetSignupDraft, setLoginMobileNo, setSignupDraft } from "@/redux/slices/authSlice";
+import { RootState } from "@/redux/store";
 import { authService } from "@/services/auth.service";
 import { useSecurityToken } from "@/utils/securityToken";
 import { toastService } from "@/utils/toast.service";
@@ -18,8 +19,9 @@ interface LoginValues {
 export function useLogin() {
   const { getSecurityToken } = useSecurityToken();
   const dispatch = useAppDispatch();
+  const { authFlow,loginMobileNo } = useAppSelector((state:RootState) => state.auth);
   const initialValues: LoginValues = {
-    phone: "",
+    phone: loginMobileNo || "",
   };
 
   const handlePhoneChange = (value: string) => {
@@ -56,8 +58,6 @@ export function useLogin() {
         token,
       });
 
-      console.log(response);
-
       toastService.showToast(
         "OTP sent successfully! Please check your phone.",
         "success",
@@ -74,10 +74,18 @@ export function useLogin() {
     }
   };
 
+  const handleSignup = () => {
+    dispatch(resetLoginMobileNo());
+    dispatch(resetSignupDraft())
+    dispatch(setStep("SIGNUP"));
+    };
+
   return {
     login,
     dispatch,
     initialValues,
     handlePhoneChange,
+    loginMobileNo,
+    handleSignup
   };
 }

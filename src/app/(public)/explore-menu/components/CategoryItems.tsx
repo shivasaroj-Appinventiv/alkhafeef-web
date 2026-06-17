@@ -6,7 +6,6 @@ interface Props {
 }
 export default async function CategoryItems({ categoryId }: Props) {
   const items = await getMenuItemList(categoryId);
-  console.log(items, categoryId, "******************88");
 
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-4 wid">

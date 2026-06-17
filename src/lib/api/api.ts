@@ -1,7 +1,12 @@
 import { toastService } from "@/utils/toast.service";
-import axios from "axios";
+import axios, { type InternalAxiosRequestConfig } from "axios";
 import { getSession, signOut } from "next-auth/react";
 import { API_BASE_URL, API_BASIC_AUTH, API_KEY } from "@/lib/api/config";
+
+export interface ApiRequestConfig extends InternalAxiosRequestConfig {
+  skipSignOutOn401?: boolean;
+  skipErrorToast?: boolean;
+}
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
@@ -12,7 +17,7 @@ export const api = axios.create({
 });
 
 api.interceptors.request.use(
-  async (config) => {
+  async (config: ApiRequestConfig) => {
     config.headers["api_key"] = API_KEY;
     config.headers["language"] = "en";
     config.headers["platform"] = "3";
@@ -37,23 +42,40 @@ api.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
+function isSessionInvalidError(status?: number, data?: { type?: string }) {
+  if (status !== 401) return false;
+
+  const type = data?.type;
+  return (
+    type === "TOKEN_EXPIRED" ||
+    type === "INVALID_TOKEN" ||
+    type === "SESSION_EXPIRED" ||
+    type === "UNAUTHORIZED"
+  );
+}
+
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    const isLogoutRequest = error.config?.url?.includes("/logout");
+    const config = error.config as ApiRequestConfig | undefined;
+    const isLogoutRequest = config?.url?.includes("/logout");
+    const skipErrorToast = config?.skipErrorToast ?? false;
+    const skipSignOut = config?.skipSignOutOn401 ?? false;
 
-    if (!isLogoutRequest) {
+    if (!isLogoutRequest && !skipErrorToast) {
       const message = error?.response?.data?.message || "Something went wrong";
       toastService.showToast(message, "error");
     }
 
-    if (error?.response?.status === 401 && !isLogoutRequest) {
+    const shouldSignOut =
+      !isLogoutRequest &&
+      !skipSignOut &&
+      isSessionInvalidError(error?.response?.status, error?.response?.data);
+
+    if (shouldSignOut) {
       await signOut({ redirect: false });
     }
 
     return Promise.reject(error);
   },
 );
-
-
-

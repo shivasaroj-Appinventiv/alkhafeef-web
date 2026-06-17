@@ -1,4 +1,4 @@
-import { LoginOTPVerificationPayload } from "@/components/auth/auth.interface";
+import { LoginOTPVerificationPayload, SignupPayload } from "@/components/auth/auth.interface";
 import { api } from "@/lib/api/api";
 import { API_RSA_PUBLIC_KEY } from "@/lib/api/config";
 import { encryptTimestamp } from "@/utils/encryption";
@@ -36,5 +36,9 @@ export const authService = {
     const response = await fetch("/api/auth/logout", { method: "POST" });
     if (!response.ok) throw new Error("Logout failed");
     return response;
+  },
+
+  async signup(payload: SignupPayload) {
+    return api.post("/userOnboard/api/v1/signup", payload);
   },
 };

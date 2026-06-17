@@ -2,10 +2,12 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authSlice from "./slices/authSlice";
 import authModalSlice from "./slices/authModalSlice";
 import globalSlice from "./slices/globalSlice";
+import cartSlice from "./slices/cartSlice";
 const reducers = combineReducers({
   auth: authSlice,
   authModal: authModalSlice,
   global: globalSlice,
+  cart: cartSlice,
 });
 
 const reducerProxy = (state: any, action: any) => {

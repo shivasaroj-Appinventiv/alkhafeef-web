@@ -10,8 +10,6 @@ import OtpModal from "./otp/OtpModal";
 export default function AuthModal() {
   const dispatch = useAppDispatch();
   const { isOpen, step } = useAppSelector((state) => state.authModal);
-  const loginMobileNo = useAppSelector((state) => state.auth.loginMobileNo);
-
   if (!isOpen) return null;
 
   return (
@@ -29,8 +27,8 @@ export default function AuthModal() {
 
         {step === "SIGNUP" && <SignupModal />}
 
-        {step === "OTP" && loginMobileNo && (
-          <OtpModal mobileNo={loginMobileNo} />
+        {step === "OTP" && (
+          <OtpModal />
         )}
       </div>
     </div>

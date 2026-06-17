@@ -30,8 +30,7 @@ export async function fetchBanners(): Promise<BannerData[]> {
   const { servicesAvailable = "pickup" } = options;
 
   const url = `${API_BASE_URL}/banners?servicesAvailable=${servicesAvailable}`;
-  console.log(url,getHeaders());
-  
+
   const response = await fetch(url, {
     method: "GET",
     headers: getHeaders(),
@@ -48,7 +47,6 @@ export async function fetchBanners(): Promise<BannerData[]> {
   if (!data.data || !Array.isArray(data.data)) {
     throw new Error("Invalid banner response structure");
   }
-  console.log(data.data);
 
   return data.data;
 }

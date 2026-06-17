@@ -2,11 +2,10 @@
 
 import { Formik } from "formik";
 import { loginSchema } from "@/validations/auth.validation";
-import { setStep } from "@/redux/slices/authModalSlice";
 import { useLogin } from "./useLogin";
 
 export default function LoginModal() {
-  const { login, dispatch, initialValues,handlePhoneChange } = useLogin();
+  const { login, initialValues,handlePhoneChange,handleSignup } = useLogin();
   return (
     <Formik
       initialValues={initialValues}
@@ -89,7 +88,7 @@ export default function LoginModal() {
 
             <button
               type="button"
-              onClick={() => dispatch(setStep("SIGNUP"))}
+              onClick={handleSignup}
               className="ml-2 text-sm font-semibold text-orange-500 hover:text-orange-600 cursor-pointer"
             >
               Sign Up

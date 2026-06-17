@@ -11,8 +11,8 @@ import { Suspense } from "react";
 import AuthSessionProvider from "@/providers/SessionProvider";
 import LoginPrompt from "@/components/auth/LoginPrompt";
 
-import AuthInitializer from "@/providers/AuthInitializer";
 import GLobalDialogs from "@/shared/GlobalDialogs";
+import CartInitializer from "@/providers/CartInitializer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -60,6 +60,7 @@ export default function RootLayout({
               </Suspense>
               <ToastContainer />
               <GLobalDialogs />
+              <CartInitializer/>
               <Header />
               <main className="bg-[#f6efe5]">{children}</main>
 

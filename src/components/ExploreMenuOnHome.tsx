@@ -24,8 +24,6 @@ function ArrowIcon() {
 }
 
 export default function ExploreMenuOnHome({ menus }: ExploreMenuOnHomeProps) {
-  console.log(menus);
-
   const visibleMenus = [...menus]
     .filter((menu) => menu._id && menu.titleEnglish)
     .sort((a, b) => a.displayOrder - b.displayOrder);

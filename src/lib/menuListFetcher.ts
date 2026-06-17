@@ -39,7 +39,6 @@ export async function fetchMenList(): Promise<MenuData[]> {
   }
 
   const data: MenuResponse = await response.json();
-  console.log(data);
 
   if (!data.data || !Array.isArray(data.data)) {
     throw new Error("Invalid menu response structure");

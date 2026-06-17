@@ -2,60 +2,19 @@
 
 import { Formik } from "formik";
 import { signupSchema } from "@/validations/auth.validation";
-import { useAppDispatch } from "@/redux/hooks";
-import { setStep } from "@/redux/slices/authModalSlice";
+import { useSignup } from "./useSignup";
 
-interface SignupValues {
-  name: string;
-  email: string;
-  phone: string;
-}
 
 export default function SignupModal() {
-  const dispatch = useAppDispatch();
+  const { handleSubmit, initialValues, handlePhoneChange,handleSignin } = useSignup();
 
-  const initialValues: SignupValues = {
-    name: "",
-    email: "",
-    phone: "",
-  };
-
-  const handlePhoneChange = (value: string) => {
-    let phone = value.replace(/\D/g, "");
-
-    if (phone.length > 0 && phone[0] !== "5") {
-      return "";
-    }
-
-    return phone.slice(0, 9);
-  };
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={signupSchema}
       validateOnMount
-      onSubmit={async (values, { setSubmitting }) => {
-        try {
-          const payload = {
-            name: values.name.trim(),
-            email: values.email.trim(),
-            phone: values.phone,
-            countryCode: "+966",
-          };
-
-          console.log(payload);
-
-          // const response =
-          // await authService.register(payload);
-
-          // dispatch(setStep("OTP"));
-        } catch (error) {
-          console.error(error);
-        } finally {
-          setSubmitting(false);
-        }
-      }}
+      onSubmit={ (values, { setSubmitting }) => handleSubmit(values, setSubmitting)}
     >
       {({
         values,
@@ -197,7 +156,7 @@ export default function SignupModal() {
 
             <button
               type="button"
-              onClick={() => dispatch(setStep("LOGIN"))}
+              onClick={handleSignin}
               className="ml-2 text-sm font-semibold text-orange-500 hover:text-orange-600 cursor-pointer"
             >
               Sign In

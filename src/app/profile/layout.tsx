@@ -8,6 +8,7 @@ export default async function PrivateLayout({
   children: React.ReactNode;
 }) {
   const session = await auth();
+  // console.log(session);
   if (!session?.user) {
     redirect("/?login=1&callbackUrl=/profile/orders");
   }

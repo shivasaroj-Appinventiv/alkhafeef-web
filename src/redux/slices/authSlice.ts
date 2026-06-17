@@ -1,82 +1,18 @@
-// import { createSlice } from "@reduxjs/toolkit";
-// import Cookies from "js-cookie";
-// interface User {
-//   id: string;
-//   fullName: string;
-//   email: string;
-//   isEmailVerified: boolean;
-//   mobileNo: string;
-//   countryCode: string;
-// }
-
-// interface AuthState {
-//   user: User | null;
-//   token: string | null;
-//   isAuthenticated: boolean;
-//   loginMobileNo: string | null;
-// }
-
-// const initialState: AuthState = {
-//   user: null,
-//   token: null,
-//   isAuthenticated: false,
-//   loginMobileNo: null,
-// };
-
-// const authSlice = createSlice({
-//   name: "auth",
-//   initialState,
-
-//   reducers: {
-//     setCredentials(state, action) {
-//       state.user = action.payload.user;
-//       state.token = action.payload.token;
-//       state.isAuthenticated = true;
-//     },
-
-//     setUserData(state, action) {
-//       state.user = action.payload;
-//       state.isAuthenticated = true;
-//     },
-
-//     setLoginMobileNo(state, action) {
-//       state.loginMobileNo = action.payload;
-//     },
-
-//     resetLoginMobileNo(state) {
-//       state.loginMobileNo = null;
-//     },
-
-//     logout(state) {
-//       state.user = null;
-//       state.token = null;
-//       state.isAuthenticated = false;
-//       state.loginMobileNo = null;
-//       Cookies.remove("accessToken");
-//     },
-//   },
-// });
-
-// export const {
-//   setCredentials,
-//   logout,
-//   setLoginMobileNo,
-//   resetLoginMobileNo,
-//   setUserData,
-// } = authSlice.actions;
-
-// export default authSlice.reducer;
-
-
-
 import { createSlice } from "@reduxjs/toolkit";
-
 interface AuthState {
   loginMobileNo: string | null;
+  signupDraft: {
+    fullName: string;
+    email?: string;
+    mobileNo: string;
+    countryCode: string;
+  } | null;
+  authFlow: "login" | "signup";
 }
-
 const initialState: AuthState = {
   loginMobileNo: null,
+  signupDraft: null,
+  authFlow: "login",
 };
 
 const authSlice = createSlice({
@@ -84,13 +20,23 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setLoginMobileNo(state, action) {
+      state.authFlow = "login";
       state.loginMobileNo = action.payload;
     },
     resetLoginMobileNo(state) {
+      state.authFlow = "login";
       state.loginMobileNo = null;
+    },
+    setSignupDraft(state, action) {
+      state.authFlow = "signup";
+      state.signupDraft = action.payload;
+    },
+    resetSignupDraft(state) {
+      state.authFlow = "signup";
+      state.signupDraft = null;
     },
   },
 });
 
-export const { setLoginMobileNo, resetLoginMobileNo } = authSlice.actions;
+export const { setLoginMobileNo, resetLoginMobileNo, setSignupDraft, resetSignupDraft } = authSlice.actions;
 export default authSlice.reducer;

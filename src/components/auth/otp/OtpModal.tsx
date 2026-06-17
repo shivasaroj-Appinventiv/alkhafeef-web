@@ -7,19 +7,10 @@ import { useAppDispatch } from "@/redux/hooks";
 import { otpSchema } from "@/validations/auth.validation";
 import { useOtpVerification } from "./useOtpVerfication";
 
-interface OTPModalProps {
-  mobileNo: string;
-}
 
-export default function OTPModal({
-  mobileNo,
-}: OTPModalProps) {
-  const dispatch = useAppDispatch();
-  const {
-    verifyOtp,
-    resendOtp,
-    seconds,
-  } = useOtpVerification(mobileNo);
+export default function OTPModal() {
+  const { verifyOtp, resendOtp, seconds, mobileNo, handleEditMobileNo } =
+    useOtpVerification();
 
   const minutes = Math.floor(seconds / 60);
 
@@ -37,7 +28,7 @@ export default function OTPModal({
             mobileNo,
             mobileOtp: values.otp,
           },
-          setSubmitting
+          setSubmitting,
         )
       }
     >
@@ -49,32 +40,22 @@ export default function OTPModal({
         handleSubmit,
         isSubmitting,
       }) => (
-        <form
-          onSubmit={handleSubmit}
-          className="w-full"
-        >
+        <form onSubmit={handleSubmit} className="w-full">
           <div className="border-b py-5 text-center">
-            <h2 className="text-2xl font-bold">
-              OTP CODE VERIFICATION
-            </h2>
+            <h2 className="text-2xl font-bold">OTP CODE VERIFICATION</h2>
           </div>
 
           <div className="p-8">
             <p className="text-center text-gray-700 leading-7">
-              We have sent a one-time password
-              (OTP) to your phone number
+              We have sent a one-time password (OTP) to your phone number
             </p>
 
             <div className="mt-3 text-center">
-              <span className="text-xl font-semibold">
-                +966-{mobileNo}
-              </span>
+              <span className="text-xl font-semibold">+966-{mobileNo}</span>
 
               <button
                 type="button"
-                onClick={() =>
-                  dispatch(setStep("LOGIN"))
-                }
+                onClick={handleEditMobileNo}
                 className="ml-2 text-orange-500 text-sm hover:underline"
               >
                 Edit
@@ -84,9 +65,7 @@ export default function OTPModal({
             <div className="mt-8 flex justify-center">
               <OTPInput
                 value={values.otp}
-                onChange={(otp) =>
-                  setFieldValue("otp", otp)
-                }
+                onChange={(otp) => setFieldValue("otp", otp)}
                 numInputs={6}
                 shouldAutoFocus
                 renderInput={(props) => (
@@ -120,10 +99,7 @@ export default function OTPModal({
 
             <button
               type="submit"
-              disabled={
-                values.otp.length !== 6 ||
-                isSubmitting
-              }
+              disabled={values.otp.length !== 6 || isSubmitting}
               className="
                 mt-8
                 h-14
@@ -139,9 +115,7 @@ export default function OTPModal({
                 disabled:cursor-not-allowed
               "
             >
-              {isSubmitting
-                ? "Verifying..."
-                : "Verify"}
+              {isSubmitting ? "Verifying..." : "Verify"}
             </button>
 
             <div className="mt-8 text-center">
@@ -149,10 +123,7 @@ export default function OTPModal({
                 <p className="text-gray-700">
                   Resend code in{" "}
                   <span className="font-semibold text-orange-500">
-                    {minutes}:
-                    {remainingSeconds
-                      .toString()
-                      .padStart(2, "0")}
+                    {minutes}:{remainingSeconds.toString().padStart(2, "0")}
                   </span>
                 </p>
               ) : (
