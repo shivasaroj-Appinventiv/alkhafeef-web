@@ -62,6 +62,14 @@ export default function OTPModal() {
 
             <div className="mt-8 flex justify-center">
               <OTPInput
+              inputStyle={{
+                width: '3rem',
+                height: '3rem',
+                fontSize: '1.5rem',
+                borderRadius: '13px',
+                border: '1px solid rgba(0,0,0,0.3)',
+                background: 'white'
+              }}
                 value={values.otp}
                 onChange={(otp) => setFieldValue("otp", otp)}
                 numInputs={6}
@@ -69,18 +77,9 @@ export default function OTPModal() {
                 renderInput={(props) => (
                   <input
                     {...props}
-                    className="
-                    h-14
-                    w-14
-                    rounded-xl
-                    border
-                    border-gray-300
-                    text-center
-                    text-xl
-                    font-semibold
-                    outline-none
-                    focus:border-orange-500
-                  "
+                
+
+                  
                   />
                 )}
                 containerStyle={{
@@ -103,11 +102,10 @@ export default function OTPModal() {
                 h-14
                 w-full
                 rounded-full
-                bg-[#EAA47A]
+                bg-[#f17022]
                 font-semibold
                 text-white
                 transition
-                hover:bg-[#e79260]
                 cursor-pointer
                 disabled:opacity-50
                 disabled:cursor-not-allowed
@@ -132,6 +130,7 @@ export default function OTPModal() {
                     font-semibold
                     text-orange-500
                     hover:underline
+                    cursor-pointer
                   "
                 >
                   Resend OTP

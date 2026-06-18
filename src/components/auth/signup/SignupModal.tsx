@@ -53,7 +53,7 @@ export default function SignupModal() {
               value={values.name}
               onChange={handleChange}
               onBlur={handleBlur}
-              className="h-14 w-full rounded-xl border border-gray-300 px-4 outline-none focus:border-orange-400"
+              className="h-14 w-full bg-white rounded-xl border border-gray-300 px-4 outline-none focus:border-orange-400"
             />
 
             {touched.name && errors.name && (
@@ -80,7 +80,7 @@ export default function SignupModal() {
               value={values.email}
               onChange={handleChange}
               onBlur={handleBlur}
-              className="h-14 w-full rounded-xl border border-gray-300 px-4 outline-none focus:border-orange-400"
+              className="h-14 w-full bg-white rounded-xl border border-gray-300 px-4 outline-none focus:border-orange-400"
             />
 
             {touched.email && errors.email && (
@@ -99,7 +99,7 @@ export default function SignupModal() {
             </label>
 
             <div className="flex h-14 overflow-hidden rounded-xl border border-gray-300">
-              <div className="flex items-center border-r border-gray-200 px-4 font-medium text-gray-600">
+              <div className="flex items-center border-r border-gray-200 px-4 font-medium text-gray-600 bg-white">
                 +966
               </div>
 
@@ -115,7 +115,7 @@ export default function SignupModal() {
                 onChange={(e) =>
                   setFieldValue("phone", handlePhoneChange(e.target.value))
                 }
-                className="flex-1 px-4 outline-none"
+                className="flex-1 px-4 outline-none bg-white"
               />
             </div>
 
