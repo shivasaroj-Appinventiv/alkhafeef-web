@@ -1,30 +1,28 @@
 "use client";
 
-import { useRequireAuth } from "@/hooks/useRequireAuth";
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus, Trash2 } from "lucide-react";
+import type { MenuItem } from "@/types/menu";
+import { useCartItem } from "@/hooks/useCartItem";
 
 interface AddToCartButtonProps {
-  quantity: number;
-  onAdd: () => void;
-  onIncrease: () => void;
-  onDecrease: () => void;
+  item: MenuItem;
 }
 
-export default function AddToCartButton() {
-  const { requireAuth } = useRequireAuth();
+export default function AddToCartButton({ item }: AddToCartButtonProps) {
+  const {
+    quantity,
+    isMutating,
+    addToCart,
+    increaseQuantity,
+    decreaseQuantity,
+  } = useCartItem(item);
 
-const handleAdd = () => {
-  requireAuth(() => {
-    // cart logic here
-  });
-};
-
-
-  
-  const quantity=0;
   if (quantity === 0) {
     return (
       <button
+        type="button"
+        disabled={isMutating || !item.isAvailable}
+        onClick={addToCart}
         className="
           h-10 rounded-full
           bg-[#F26A21]
@@ -33,10 +31,11 @@ const handleAdd = () => {
           text-white
           cursor-pointer
           transition hover:bg-[#e65f17]
+          disabled:cursor-not-allowed disabled:opacity-50
+          cursor-pointer
         "
-        onClick={handleAdd}
       >
-        Add To Cart
+        {isMutating ? "Adding..." : "Add To Cart"}
       </button>
     );
   }
@@ -50,24 +49,36 @@ const handleAdd = () => {
       "
     >
       <button
+        type="button"
+        disabled={isMutating}
+        onClick={decreaseQuantity}
+        aria-label={quantity === 1 ? "Remove item" : "Decrease quantity"}
         className="
           flex h-full w-11 items-center justify-center
           text-[#F26A21]
           hover:bg-orange-50
+          disabled:opacity-50
+          cursor-pointer
         "
       >
-        <Minus size={18} />
+        {quantity === 1 ? <Trash2 size={18} /> : <Minus size={18} />}
       </button>
 
       <span className="w-10 text-center font-semibold">
-        {quantity}
+        {isMutating ? "..." : quantity}
       </span>
 
       <button
+        type="button"
+        disabled={isMutating || !item.isAvailable}
+        onClick={increaseQuantity}
+        aria-label="Increase quantity"
         className="
           flex h-full w-11 items-center justify-center
           bg-[#F26A21]
           text-white
+          disabled:opacity-50
+          cursor-pointer
         "
       >
         <Plus size={18} />

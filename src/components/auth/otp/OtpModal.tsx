@@ -2,8 +2,6 @@
 
 import OTPInput from "react-otp-input";
 import { Formik } from "formik";
-import { setStep } from "@/redux/slices/authModalSlice";
-import { useAppDispatch } from "@/redux/hooks";
 import { otpSchema } from "@/validations/auth.validation";
 import { useOtpVerification } from "./useOtpVerfication";
 

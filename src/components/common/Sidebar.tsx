@@ -18,6 +18,7 @@ import { toastService } from "@/utils/toast.service";
 import { useAppDispatch } from "@/redux/hooks";
 import { closeModal } from "@/redux/slices/authModalSlice";
 import { resetLoginMobileNo } from "@/redux/slices/authSlice";
+import { clearCart } from "@/redux/slices/cartSlice";
 import { openDialog } from "@/redux/slices/globalSlice";
 
 interface SidebarProps {
@@ -54,6 +55,7 @@ export default function Sidebar({ user }: SidebarProps) {
 
   const handleLogout = async () => {
     dispatch(closeModal());
+    dispatch(clearCart());
     await logoutUser(router);
     dispatch(resetLoginMobileNo());
     toastService.showToast("Logged out successfully", "success");

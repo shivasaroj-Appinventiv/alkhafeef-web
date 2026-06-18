@@ -59,3 +59,28 @@ export interface CartListApiResponse {
   type: "CART_ITEM_LIST";
   data: CartListData;
 }
+
+export interface UpdateCartQuantityPayload {
+  hashId: string;
+  isIncrement: boolean;
+  itemId: string;
+  quantity: number;
+}
+
+export interface RemoveFromCartPayload {
+  hashId: string;
+  itemId: string;
+  quantity: number;
+  offerdItem: boolean;
+}
+
+export interface AddToCartPayload {
+  itemId: string;
+  menuId: string;
+  hashId: string;
+  itemSdmId: number;
+  quantity: number;
+  servicesAvailable: string;
+  modGroups: unknown[];
+  offerdItem: boolean;
+}

@@ -77,7 +77,7 @@ export default function ItemCard({ item }: Props) {
             </h4>
           </div>
 
-          <AddToCartButton />
+          <AddToCartButton item={item} />
         </div>
 
         {item.isCustomised && (
