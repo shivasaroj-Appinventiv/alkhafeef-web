@@ -1,5 +1,7 @@
-import { useEffect, useState, useCallback } from 'react';
-import type { BannerResponse, FetchBannerOptions } from '@/types/banner';
+import { useEffect, useState, useCallback } from "react";
+import type { BannerResponse, FetchBannerOptions } from "@/types/banner";
+import { CLIENT_API_BASE_URL } from "@/lib/api/config";
+import { STORE_ENDPOINTS } from "@/lib/api/endpoints";
 
 interface UseBannersOptions extends FetchBannerOptions {
   enabled?: boolean;
@@ -13,16 +15,12 @@ interface UseBannersReturn {
 }
 
 /**
- * Client-side hook for fetching banners
- * Use this only when server component fetching is not possible
- * 
- * @param options - Fetch options
- * @returns Object with data, isLoading, error, and refetch function
+ * Client-side hook for fetching banners via the secure API proxy.
  */
 export function useBanners(options: UseBannersOptions = {}): UseBannersReturn {
   const {
-    servicesAvailable = 'pickup',
-    lang = 'en',
+    servicesAvailable = "pickup",
+    lang = "en",
     enabled = true,
   } = options;
 
@@ -38,31 +36,34 @@ export function useBanners(options: UseBannersOptions = {}): UseBannersReturn {
 
     try {
       const queryParams = new URLSearchParams();
-      queryParams.append('servicesAvailable', servicesAvailable);
+      queryParams.append("servicesAvailable", servicesAvailable);
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/banners?${queryParams.toString()}`,
+        `${CLIENT_API_BASE_URL}${STORE_ENDPOINTS.BANNERS}?${queryParams.toString()}`,
         {
-          method: 'GET',
+          method: "GET",
           headers: {
-            'Content-Type': 'application/json',
-            'Accept-Language': lang === 'ar' ? 'ar' : 'en',
+            "Content-Type": "application/json",
+            "Accept-Language": lang === "ar" ? "ar" : "en",
+            language: "en",
+            platform: "3",
+            timezone: String(new Date().getTimezoneOffset() * -60 * 1000),
           },
-        }
+        },
       );
 
       if (!response.ok) {
         throw new Error(
-          `Failed to fetch banners: ${response.status} ${response.statusText}`
+          `Failed to fetch banners: ${response.status} ${response.statusText}`,
         );
       }
 
       const result: BannerResponse = await response.json();
       setData(result);
     } catch (err) {
-      const error = err instanceof Error ? err : new Error('Unknown error');
-      setError(error);
-      console.error('Banner fetch error:', error);
+      const fetchError = err instanceof Error ? err : new Error("Unknown error");
+      setError(fetchError);
+      console.error("Banner fetch error:", fetchError);
     } finally {
       setIsLoading(false);
     }

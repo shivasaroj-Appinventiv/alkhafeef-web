@@ -1,7 +1,7 @@
 import { toastService } from "@/utils/toast.service";
 import axios, { type InternalAxiosRequestConfig } from "axios";
 import { getSession, signOut } from "next-auth/react";
-import { API_BASE_URL, API_BASIC_AUTH, API_KEY } from "@/lib/api/config";
+import { CLIENT_API_BASE_URL } from "@/lib/api/config";
 
 export interface ApiRequestConfig extends InternalAxiosRequestConfig {
   skipSignOutOn401?: boolean;
@@ -9,7 +9,7 @@ export interface ApiRequestConfig extends InternalAxiosRequestConfig {
 }
 
 export const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: CLIENT_API_BASE_URL,
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
@@ -18,23 +18,17 @@ export const api = axios.create({
 
 api.interceptors.request.use(
   async (config: ApiRequestConfig) => {
-    config.headers["api_key"] = API_KEY;
     config.headers["language"] = "en";
     config.headers["platform"] = "3";
     config.headers["timezone"] = String(
       new Date().getTimezoneOffset() * -60 * 1000,
     );
 
-    const existingAuth = config.headers["authorization"];
-    if (existingAuth) return config;
-
     const session = await getSession();
     const token = session?.accessToken;
 
     if (token) {
       config.headers["authorization"] = `Bearer ${token}`;
-    } else {
-      config.headers["authorization"] = `Basic ${API_BASIC_AUTH}`;
     }
 
     return config;

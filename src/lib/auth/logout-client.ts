@@ -3,10 +3,11 @@
 import { signOut } from "next-auth/react";
 import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { clearAuthCallbackUrl } from "@/lib/auth/auth-url";
+import { APP_ENDPOINTS } from "@/lib/api/endpoints";
 
 export async function logoutUser(router?: AppRouterInstance) {
   try {
-    await fetch("/api/auth/logout", { method: "POST" });
+    await fetch(APP_ENDPOINTS.AUTH_LOGOUT, { method: "POST" });
   } catch {
     // Continue clearing local session even if the request fails
   }

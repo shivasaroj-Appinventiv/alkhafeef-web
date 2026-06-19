@@ -20,7 +20,7 @@ export default async function PrivateLayout({
           <Sidebar user={session.user} />
         </div>
 
-        <main className="flex-1 min-w-0 overflow-hidden rounded-2xl bg-white shadow-sm">
+        <main className="flex-1 p-4 min-w-0 overflow-hidden rounded-2xl bg-white shadow-sm h-full min-h-[calc(55vh)]">
           {children}
         </main>
       </div>

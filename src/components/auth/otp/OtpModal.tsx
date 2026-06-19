@@ -54,7 +54,7 @@ export default function OTPModal() {
               <button
                 type="button"
                 onClick={handleEditMobileNo}
-                className="ml-2 text-orange-500 text-sm hover:underline"
+                className="ml-2 text-orange-500 text-sm hover:underline cursor-pointer"
               >
                 Edit
               </button>

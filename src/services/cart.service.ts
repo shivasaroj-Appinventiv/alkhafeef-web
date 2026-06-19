@@ -1,4 +1,5 @@
 import { api, type ApiRequestConfig } from "@/lib/api/api";
+import { CART_ENDPOINTS } from "@/lib/api/endpoints";
 import type { AddToCartPayload, RemoveFromCartPayload, UpdateCartQuantityPayload } from "@/types/cart";
 
 const cartRequestConfig = {
@@ -7,25 +8,21 @@ const cartRequestConfig = {
 
 export const cartService = {
   getCart() {
-    return api.get("/userCart/api/v1/cartList", {
+    return api.get(CART_ENDPOINTS.LIST, {
       ...cartRequestConfig,
       skipErrorToast: true,
     } as ApiRequestConfig);
   },
 
   addToCart(payload: AddToCartPayload) {
-    return api.post("/userCart/api/v1/addToCart", payload, cartRequestConfig);
+    return api.post(CART_ENDPOINTS.ADD, payload, cartRequestConfig);
   },
 
   updateCartQuantity(payload: UpdateCartQuantityPayload) {
-    return api.put(
-      "/userCart/api/v1/updateCartQantity",
-      payload,
-      cartRequestConfig,
-    );
+    return api.put(CART_ENDPOINTS.UPDATE_QUANTITY, payload, cartRequestConfig);
   },
 
   removeFromCart(payload: RemoveFromCartPayload) {
-    return api.put("/userCart/api/v1/removeCart", payload, cartRequestConfig);
+    return api.put(CART_ENDPOINTS.REMOVE, payload, cartRequestConfig);
   },
 };

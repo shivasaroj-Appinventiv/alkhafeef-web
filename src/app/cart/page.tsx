@@ -106,7 +106,7 @@ function CartLineItem({ cartLine }: { cartLine: CartItem }) {
                   ? handleRemove()
                   : dispatch(decreaseCartItem(menuItem))
               }
-              className="flex h-9 w-9 items-center justify-center text-[#F26A21] hover:bg-orange-50 disabled:opacity-50"
+              className="flex h-9 w-9 items-center justify-center text-[#F26A21] hover:bg-orange-50 disabled:opacity-50 cursor-pointer"
               aria-label={
                 cartLine.quantity === 1 ? "Remove item" : "Decrease quantity"
               }
@@ -124,7 +124,7 @@ function CartLineItem({ cartLine }: { cartLine: CartItem }) {
               type="button"
               disabled={isMutating}
               onClick={() => dispatch(increaseCartItem(menuItem))}
-              className="flex h-9 w-9 items-center justify-center bg-[#F26A21] text-white disabled:opacity-50"
+              className="flex h-9 w-9 items-center justify-center bg-[#F26A21] text-white disabled:opacity-50 cursor-pointer"
               aria-label="Increase quantity"
             >
               <Plus size={16} />
