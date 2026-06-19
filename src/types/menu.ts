@@ -23,10 +23,6 @@ export interface FetchMenuOptions {
   revalidate?: number;
 }
 
-export interface ExploreMenuOnHomeProps {
-  menus: MenuData[];
-}
-
 export interface MenuItem {
   _id: string;
 
@@ -65,6 +61,14 @@ export interface MenuItem {
   stampEndDate: number;
   stampFromTime: number;
   stampToTime: number;
+}
+
+export interface ExploreMenuOnHomeProps {
+  menus: MenuData[];
+}
+
+export interface FavoriteItem {
+  itemDetails: MenuItem;
 }
 
 export interface NutritionInfo {

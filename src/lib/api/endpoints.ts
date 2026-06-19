@@ -34,6 +34,7 @@ export const STORE_ENDPOINTS = {
   BANNERS: `${API_V1.USER_STORE}/banners`,
   MENU_LIST: `${API_V1.USER_STORE}/menuList`,
   MENU_ITEM_LIST: `${API_V1.USER_STORE}/menuItemList`,
+  FAVOURITE_ITEM_LIST: `${API_V1.USER_STORE}/favouriteItemList`,
 } as const;
 
 /** Next.js internal API routes */

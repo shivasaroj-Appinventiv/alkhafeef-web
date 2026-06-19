@@ -1,8 +1,8 @@
-import { FetchMenuOptions, MenuData, MenuResponse } from "@/types/menu";
+import { FavoriteItem, FetchMenuOptions, MenuData, MenuItem, MenuResponse } from "@/types/menu";
 import { cache } from "react";
 import { getServerBackendConfig } from "@/lib/api/config.server";
-import { STORE_ENDPOINTS } from "@/lib/api/endpoints";
 import { buildServerBackendHeaders } from "@/lib/api/server-headers";
+import { STORE_ENDPOINTS } from "./api/endpoints";
 
 /**
  * Fetch menus — returns Promise<MenuResponse> (safe for Promise.all)
@@ -59,5 +59,25 @@ export const getMenuItemList = cache(
     const result = await response.json();
 
     return result.data ?? [];
+  },
+);
+
+
+export const getFavoriteItemsList = cache(
+  async (pageNo = 1, limit = 12, accessToken?: string): Promise<MenuItem[]> => {
+    const { API_BASE_URL } = getServerBackendConfig();
+    const params = new URLSearchParams({
+      pageNo: String(pageNo),
+      limit: String(limit),
+    });
+    const url = `${API_BASE_URL}${STORE_ENDPOINTS.FAVOURITE_ITEM_LIST}?${params.toString()}`;
+    const response = await fetch(url, {
+      method: "GET",
+      headers: buildServerBackendHeaders({ accessToken }),
+      cache: "no-store",
+    });
+
+    const {data} = await response.json();    
+    return data.data.map((item: FavoriteItem) => item.itemDetails) ?? [];
   },
 );
