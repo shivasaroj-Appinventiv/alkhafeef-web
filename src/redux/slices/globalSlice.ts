@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface Confirmation {
   open: boolean;
   message: string;
-  onConfirm: null | (() => void);
+  onConfirm: null | (() => void | Promise<void>);
 }
 
 type GlobalState = {

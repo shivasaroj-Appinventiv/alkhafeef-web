@@ -84,3 +84,10 @@ export interface AddToCartPayload {
   modGroups: unknown[];
   offerdItem: boolean;
 }
+
+export interface CartState {
+  items: CartItem[];
+  couponData: Record<string, unknown>;
+  status: "idle" | "loading" | "succeeded" | "error";
+  mutatingItemIds: string[];
+}

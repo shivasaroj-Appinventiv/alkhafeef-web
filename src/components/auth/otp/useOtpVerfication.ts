@@ -72,12 +72,13 @@ export const useOtpVerification = () => {
         const result = await signIn("otp", {
           redirect: false,
           mobileNo,
-          mobileOtp: signupDraft?.mobileNo || "",
+          mobileOtp: mobileOtp.mobileOtp || "",
           countryCode: signupDraft?.countryCode || "966",
           deviceId: attachDeviceID().toString(),
           deviceToken: "123",
         });
-
+        console.log(result, "result");
+        
         if (result?.error || result?.code === "credentials") {
           toastService.showToast("Invalid OTP", "error");
           return;

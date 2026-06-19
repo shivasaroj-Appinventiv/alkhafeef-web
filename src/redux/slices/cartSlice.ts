@@ -8,6 +8,7 @@ import {
   CartItem,
   CartListApiResponse,
   CartListData,
+  CartState,
 } from "@/types/cart";
 import type { MenuItem } from "@/types/menu";
 import {
@@ -17,12 +18,7 @@ import {
 } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 
-interface CartState {
-  items: CartItem[];
-  couponData: Record<string, unknown>;
-  status: "idle" | "loading" | "succeeded" | "error";
-  mutatingItemIds: string[];
-}
+
 
 const initialState: CartState = {
   items: [],

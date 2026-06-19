@@ -60,8 +60,8 @@ export const useSignup = () => {
         token,
       };
 
-      // const response = await authService.signup(payload);
-      // console.log(response,'Signup response');
+      const response = await authService.signup(payload);
+      console.log(response,'Signup response');
       dispatch(setStep("OTP"));
       // dispatch(openModal());
       dispatch(setSignupDraft({

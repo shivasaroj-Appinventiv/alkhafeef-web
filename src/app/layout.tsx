@@ -13,6 +13,7 @@ import LoginPrompt from "@/components/auth/LoginPrompt";
 
 import GLobalDialogs from "@/shared/GlobalDialogs";
 import CartInitializer from "@/providers/CartInitializer";
+import WishlistInitializer from "@/providers/WishlistInitializer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -61,6 +62,7 @@ export default function RootLayout({
               <ToastContainer />
               <GLobalDialogs />
               <CartInitializer/>
+              <WishlistInitializer/>
               <Header />
               <main className="bg-[#f6efe5]">{children}</main>
 
