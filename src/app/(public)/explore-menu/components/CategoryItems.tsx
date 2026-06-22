@@ -19,6 +19,8 @@ export default async function CategoryItems({
   if (categoryId === "favorite-items") {
     const session = await auth();
     items = await getFavoriteItemsList(pageNo, limit, session?.accessToken);
+    console.log(items,'favorite items');
+    
   } else {
     items = await getMenuItemList(categoryId);    
   }

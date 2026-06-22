@@ -1,11 +1,8 @@
-"use client";
-
 import Image from "next/image";
 import FavoriteButton from "./FavoriteButton";
 import AddToCartButton from "./AddToCartButton";
 import { Flame } from "lucide-react";
 import { MenuItem } from "@/types/menu";
-import { useWishlist } from "@/hooks/useWishlist";
 
 interface Props {
   item: MenuItem;
@@ -13,8 +10,6 @@ interface Props {
 
 export default function ItemCard({ item }: Props) {
   const imageSrc = item.itemImageUrl?.trim();
-  const {isWishlisted,isMutating,toggleWishlist}=useWishlist(item);
-  const isFavorite = isWishlisted;
   return (
     <article
       className="
@@ -46,7 +41,7 @@ export default function ItemCard({ item }: Props) {
             />
           ) : null}
 
-          <FavoriteButton isFavorite={isFavorite} isMutating={isMutating} onToggle={toggleWishlist} />
+          <FavoriteButton item={item} />
         </div>
       </div>
 

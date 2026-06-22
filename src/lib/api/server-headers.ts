@@ -23,7 +23,11 @@ export function buildServerBackendHeaders(
   };
 
   const forwardedAuth = forwardHeaders?.get("authorization");
-  if (forwardedAuth?.startsWith("Bearer ")) {
+  const useBasicAuth = forwardHeaders?.get("x-use-basic-auth") === "true";
+
+  if (useBasicAuth) {
+    headers.authorization = `Basic ${API_BASIC_AUTH}`;
+  } else if (forwardedAuth?.startsWith("Bearer ")) {
     headers.authorization = forwardedAuth;
   } else if (accessToken) {
     headers.authorization = `Bearer ${accessToken}`;

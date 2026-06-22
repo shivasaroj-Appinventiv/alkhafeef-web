@@ -1,5 +1,7 @@
 "use client";
 
+import { useWishlist } from "@/hooks/useWishlist";
+import { MenuItem } from "@/types/menu";
 import { Heart, Loader2 } from "lucide-react";
 
 interface FavoriteButtonProps {
@@ -8,11 +10,13 @@ interface FavoriteButtonProps {
   onToggle: () => void;
 }
 
-export default function FavoriteButton({ isFavorite, isMutating, onToggle }: FavoriteButtonProps) {
+export default function FavoriteButton({ item }:{item:MenuItem}) {
+  const {isWishlisted,isMutating,toggleWishlist}=useWishlist(item);
+  const isFavorite = isWishlisted;
   return (
     <button
       disabled={isMutating}
-      onClick={onToggle}
+      onClick={toggleWishlist}
       className="
         absolute right-3 top-3 z-10
         flex h-10 w-10 items-center justify-center

@@ -35,6 +35,7 @@ export const STORE_ENDPOINTS = {
   MENU_LIST: `${API_V1.USER_STORE}/menuList`,
   MENU_ITEM_LIST: `${API_V1.USER_STORE}/menuItemList`,
   FAVOURITE_ITEM_LIST: `${API_V1.USER_STORE}/favouriteItemList`,
+  MY_STORE_LIST: `${API_V1.USER_STORE}/myStoreList`,
 } as const;
 
 /** Next.js internal API routes */
@@ -42,3 +43,7 @@ export const APP_ENDPOINTS = {
   AUTH_LOGOUT: "/api/auth/logout",
   BACKEND_PROXY: "/api/backend",
 } as const;
+
+
+
+

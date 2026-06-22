@@ -14,6 +14,8 @@ import LoginPrompt from "@/components/auth/LoginPrompt";
 import GLobalDialogs from "@/shared/GlobalDialogs";
 import CartInitializer from "@/providers/CartInitializer";
 import WishlistInitializer from "@/providers/WishlistInitializer";
+import LocationInitializer from "@/providers/LocationInitializer";
+import LocationSelection from "@/components/location-selection/LocationSelection";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -63,11 +65,13 @@ export default function RootLayout({
               <GLobalDialogs />
               <CartInitializer/>
               <WishlistInitializer/>
+              <LocationInitializer />
               <Header />
               <main className="bg-[#f6efe5]">{children}</main>
 
               <Footer />
               <AuthModal />
+              <LocationSelection />
             </ReduxProvider>
           </AuthSessionProvider>
         </RecaptchaProvider>

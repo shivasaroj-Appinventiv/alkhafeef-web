@@ -6,26 +6,29 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { openModal, setStep } from "@/redux/slices/authModalSlice";
 import { useSession } from "next-auth/react";
 import { selectCartCount } from "@/redux/slices/cartSlice";
+import Image from "next/image";
+import { useLocationSelection } from "@/hooks/useLocationSelection";
 
 interface HeaderProps {
   userName?: string;
   lang?: "en" | "ar";
 }
 
-export default function Header({
-  lang = "en",
-}: HeaderProps) {
+export default function Header({ lang = "en" }: HeaderProps) {
   const [searchValue, setSearchValue] = useState("");
   const dispatch = useAppDispatch();
 
   const { data: session } = useSession();
   const isLoggedIn = !!session?.user;
   const user = session?.user;
-  const handleLogin = () =>{
+  const handleLogin = () => {
     dispatch(setStep("LOGIN"));
     dispatch(openModal());
-  }
+  };
   const cartCount = useAppSelector(selectCartCount);
+  const { bannerText, buttonLabel, hasAddress, openLocation } =
+    useLocationSelection();
+
   return (
     <header className="w-full bg-white border-b border-slate-200 sticky top-0 z-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -129,6 +132,36 @@ export default function Header({
             )}
           </div>
         </div>
+        <div className="h-[1px] bg-slate-200 w-full"></div>
+      </div>
+
+      <div className="flex items-center justify-center gap-3 bg-[#113d2d] bg-[url('/svg/second-header-bg.svg')] bg-cover bg-center px-4 py-5">
+        <Image
+          src="/svg/pin-location.svg"
+          alt="Location"
+          width={20}
+          height={20}
+        />
+
+        <button
+          type="button"
+          onClick={openLocation}
+          className="max-w-[50vw] truncate text-sm font-light uppercase text-white underline cursor-pointer"
+        >
+          {bannerText}
+        </button>
+
+        <button
+          type="button"
+          onClick={openLocation}
+          className={`ml-2 shrink-0 rounded-full px-5 py-2 text-sm font-medium transition cursor-pointer ${
+            hasAddress
+              ? "border border-white bg-white text-[#113d2d] hover:bg-white/90"
+              : "bg-[#f26a21] text-white hover:bg-[#e05c2a]"
+          }`}
+        >
+          {buttonLabel}
+        </button>
       </div>
     </header>
   );

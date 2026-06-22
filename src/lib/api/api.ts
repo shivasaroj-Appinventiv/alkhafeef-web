@@ -6,6 +6,7 @@ import { CLIENT_API_BASE_URL } from "@/lib/api/config";
 export interface ApiRequestConfig extends InternalAxiosRequestConfig {
   skipSignOutOn401?: boolean;
   skipErrorToast?: boolean;
+  useBasicAuth?: boolean;
 }
 
 export const api = axios.create({
@@ -27,7 +28,9 @@ api.interceptors.request.use(
     const session = await getSession();
     const token = session?.accessToken;
 
-    if (token) {
+    if (config.useBasicAuth) {
+      config.headers["x-use-basic-auth"] = "true";
+    } else if (token) {
       config.headers["authorization"] = `Bearer ${token}`;
     }
 
