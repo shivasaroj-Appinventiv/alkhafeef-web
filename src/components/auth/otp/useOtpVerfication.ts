@@ -10,6 +10,7 @@ import { resetLoginMobileNo, resetSignupDraft } from "@/redux/slices/authSlice";
 import { attachDeviceID } from "@/hooks/useDeviceId";
 import { RootState } from "@/redux/store";
 import { fetchCart } from "@/redux/slices/cartSlice";
+import { useSecurityToken } from "@/utils/securityToken";
 
 interface VerifyOtpPayload {
   mobileOtp: string;
@@ -18,6 +19,7 @@ interface VerifyOtpPayload {
 
 export const useOtpVerification = () => {
   const dispatch = useAppDispatch();
+  const { getSecurityToken } = useSecurityToken();
   const { authFlow, loginMobileNo, signupDraft } = useAppSelector(
     (state: RootState) => state.auth,
   );
@@ -106,10 +108,22 @@ export const useOtpVerification = () => {
 
   const resendOtp = async () => {
     try {
-      await authService.resendOtp({
+      const recaptchaAction = authFlow === "login" ? "login" : "signup";
+      const token = await getSecurityToken(recaptchaAction);
+
+      if (!token) {
+        toastService.showToast(
+          "Security verification failed. Please refresh and try again.",
+          "error",
+        );
+        return;
+      }
+
+      await authService.sendOtp({
         mobileNo,
         countryCode:
           authFlow === "login" ? "966" : signupDraft?.countryCode || "966",
+        token,
       });
 
       toastService.showToast("OTP Resent Successfully", "success");

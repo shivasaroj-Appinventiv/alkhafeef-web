@@ -13,7 +13,7 @@ export default function AuthModal() {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 p-4">
+    <div className="dialog-backdrop z-[999]">
       <div className="relative w-full max-w-md rounded-3xl bg-[#F7F4EA] shadow-xl">
         <button
           type="button"

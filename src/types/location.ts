@@ -1,8 +1,20 @@
 export type ServiceType = "pickup" | "carhop" | "dine-in" | "delivery";
 
+export interface StoreRestaurantLocation {
+  coordinates: [number, number];
+  areaNameEnglish?: string;
+  areaNameArabic?: string;
+  cityName?: string;
+  stateName?: string;
+  countryName?: string;
+  zipCode?: string;
+}
+
 export interface Store {
   storeId: string;
   storeName: string;
+  storeNameEnglish: string;
+  storeNameArabic: string;
   addressEnglish: string;
   addressArabic?: string;
   imageUrl?: string;
@@ -12,6 +24,10 @@ export interface Store {
   openTime?: string;
   closeTime?: string;
   servicesAvailable: ServiceType[];
+  storeSdmId: number;
+  areaId: number;
+  restaurantLocation?: StoreRestaurantLocation;
+  paymentMethods: string[];
 }
 
 export interface SelectedLocation {
@@ -38,6 +54,7 @@ export interface ApiRestaurantLocation {
   cityName?: string;
   stateName?: string;
   countryName?: string;
+  zipCode?: string;
 }
 
 export interface ApiStoreItem {
@@ -45,6 +62,8 @@ export interface ApiStoreItem {
   nameEnglish: string;
   nameArabic: string;
   storeNoteEnglish?: string;
+  sdmId: number;
+  areaId: number;
   servicePickup: boolean;
   serviceCurbSide: boolean;
   serviceDelivery: boolean;
@@ -52,6 +71,7 @@ export interface ApiStoreItem {
   workingHoursStartTimeInMinutes: number;
   workingHoursEndTimeInMinutes: number;
   restaurantLocation?: ApiRestaurantLocation;
+  paymentMethod?: string[];
   distance?: number;
 }
 

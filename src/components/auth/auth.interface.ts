@@ -19,3 +19,9 @@ export interface LoginOTPVerificationPayload {
   mobileNo: string;
   mobileOtp: string;
 }
+
+export interface SendOtpPayload {
+  mobileNo: string;
+  countryCode: string;
+  token: string;
+}

@@ -24,3 +24,7 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@utility dialog-backdrop {
+  @apply fixed inset-0 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm;
+}

@@ -93,7 +93,7 @@ export default function LocationSelection() {
   };
 
   return (
-    <div className="fixed inset-0 z-[998] flex items-center justify-center bg-black/50 p-4">
+    <div className="dialog-backdrop z-[998]">
       <div className="relative flex h-[90vh] w-full max-w-6xl flex-col overflow-hidden rounded-3xl bg-[#F7F4EA] shadow-xl">
         <button
           type="button"

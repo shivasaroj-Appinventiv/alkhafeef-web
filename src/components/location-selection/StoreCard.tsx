@@ -25,6 +25,7 @@ export default function StoreCard({
   onSelectStore,
   onSelectService,
 }: Props) {
+  
   return (
     <button
       type="button"

@@ -32,7 +32,7 @@ const ConfirmationDialog = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/45"
+      className="dialog-backdrop z-50"
       onClick={isConfirming ? undefined : onCancel}
     >
       <div

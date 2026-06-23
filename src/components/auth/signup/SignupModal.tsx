@@ -129,7 +129,7 @@ export default function SignupModal() {
           <button
             type="submit"
             disabled={!isValid || isSubmitting}
-            className="mt-6 h-14 w-full rounded-full bg-orange-400 font-semibold text-white transition hover:bg-orange-500 disabled:cursor-not-allowed disabled:opacity-50"
+            className="mt-6 h-14 w-full rounded-full bg-orange-400 font-semibold text-white transition hover:bg-orange-500 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
           >
             {isSubmitting ? "Creating Account..." : "Continue"}
           </button>

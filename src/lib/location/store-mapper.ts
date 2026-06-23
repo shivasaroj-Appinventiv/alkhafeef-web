@@ -36,12 +36,30 @@ function buildAddress(store: ApiStoreItem): string {
     .join(", ");
 }
 
+function mapRestaurantLocation(
+  location?: ApiStoreItem["restaurantLocation"],
+): Store["restaurantLocation"] {
+  if (!location) return undefined;
+
+  return {
+    coordinates: location.coordinates,
+    areaNameEnglish: location.areaNameEnglish,
+    areaNameArabic: location.areaNameArabic,
+    cityName: location.cityName,
+    stateName: location.stateName,
+    countryName: location.countryName,
+    zipCode: location.zipCode ?? "",
+  };
+}
+
 export function mapApiStoreToStore(store: ApiStoreItem): Store {
   const [longitude = 0, latitude = 0] = store.restaurantLocation?.coordinates ?? [];
 
   return {
     storeId: store._id,
     storeName: store.nameEnglish,
+    storeNameEnglish: store.nameEnglish,
+    storeNameArabic: store.nameArabic,
     addressEnglish: buildAddress(store),
     addressArabic: store.nameArabic,
     latitude,
@@ -53,6 +71,10 @@ export function mapApiStoreToStore(store: ApiStoreItem): Store {
     openTime: formatMinutesToTime(store.workingHoursStartTimeInMinutes),
     closeTime: formatMinutesToTime(store.workingHoursEndTimeInMinutes),
     servicesAvailable: getServicesAvailable(store),
+    storeSdmId: store.sdmId,
+    areaId: store.areaId,
+    restaurantLocation: mapRestaurantLocation(store.restaurantLocation),
+    paymentMethods: store.paymentMethod ?? ["2"],
   };
 }
 

@@ -107,6 +107,20 @@ const locationSlice = createSlice({
         if (!hasActiveStore) {
           state.activeStoreId = action.payload[0]?.storeId ?? null;
         }
+
+        if (state.selectedLocation) {
+          const freshStore = action.payload.find(
+            (store) => store.storeId === state.selectedLocation?.store.storeId,
+          );
+
+          if (freshStore) {
+            state.selectedLocation = {
+              ...state.selectedLocation,
+              store: freshStore,
+            };
+            saveSelectedLocation(state.selectedLocation);
+          }
+        }
       })
       .addCase(fetchStores.rejected, (state, action) => {
         if (action.meta.aborted) return;
