@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import {
   ClipboardList,
   CreditCard,
@@ -16,13 +17,18 @@ import {
 import { logoutUser } from "@/lib/auth/logout-client";
 import { toastService } from "@/utils/toast.service";
 import { useAppDispatch } from "@/redux/hooks";
-import { closeModal } from "@/redux/slices/authModalSlice";
+import { closeModal, openEditProfileModal } from "@/redux/slices/authModalSlice";
 import { resetLoginMobileNo } from "@/redux/slices/authSlice";
 import { clearCart } from "@/redux/slices/cartSlice";
 import { openDialog } from "@/redux/slices/globalSlice";
 
 interface SidebarProps {
-  user: { fullName: string; mobileNo: string; countryCode: string };
+  user?: {
+    fullName: string;
+    email: string;
+    mobileNo: string;
+    countryCode: string;
+  };
 }
 
 const menuItems = [
@@ -41,10 +47,17 @@ const controlItems = [
   { label: "Deactivate Profile", href: "/profile/deactivate", icon: UserX },
 ];
 
-export default function Sidebar({ user }: SidebarProps) {
+export default function Sidebar({ user: initialUser }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const { data: session } = useSession();
+
+  const user = session?.user ?? initialUser;
+
+  if (!user?.fullName || !user.mobileNo || !user.countryCode) {
+    return null;
+  }
 
   const initials = user.fullName
     .split(" ")
@@ -71,6 +84,17 @@ export default function Sidebar({ user }: SidebarProps) {
     );
   };
 
+  const handleEditProfile = () => {
+    dispatch(
+      openEditProfileModal({
+        fullName: user.fullName,
+        email: user.email ?? "",
+        mobileNo: user.mobileNo,
+        countryCode: user.countryCode,
+      }),
+    );
+  };
+
   return (
     <aside className="w-[240px] flex-shrink-0 overflow-hidden rounded-[20px] bg-[#3d6358] text-white flex flex-col">
       <div className="p-4">
@@ -91,7 +115,12 @@ export default function Sidebar({ user }: SidebarProps) {
               </div>
             </div>
           </div>
-          <button className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#f26a21]">
+          <button
+            type="button"
+            onClick={handleEditProfile}
+            aria-label="Edit profile"
+            className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#f26a21] cursor-pointer"
+          >
             <Pencil size={13} />
           </button>
         </div>

@@ -1,8 +1,9 @@
-import { FavoriteItem, FetchMenuOptions, MenuData, MenuItem, MenuResponse } from "@/types/menu";
+import { FavoriteItem, FetchMenuOptions, MenuData, MenuItem, MenuItemDetail, MenuResponse } from "@/types/menu";
 import { cache } from "react";
 import { getServerBackendConfig } from "@/lib/api/config.server";
 import { buildServerBackendHeaders } from "@/lib/api/server-headers";
-import { STORE_ENDPOINTS } from "./api/endpoints";
+import { STORE_ENDPOINTS, getItemDetailsUrl } from "./api/endpoints";
+import { applyItemStamps } from "./menu/stamp";
 
 /**
  * Fetch menus — returns Promise<MenuResponse> (safe for Promise.all)
@@ -57,8 +58,53 @@ export const getMenuItemList = cache(
     });
 
     const result = await response.json();
-    console.log(result,'result');
-    return result.data ?? [];
+    return applyItemStamps(result.data ?? []);
+  },
+);
+
+export const getMenuItemDetail = cache(
+  async (
+    itemId: string,
+    options: { menuId?: string; accessToken?: string } = {},
+  ): Promise<MenuItemDetail | null> => {
+    const { API_BASE_URL } = getServerBackendConfig();
+    const url = getItemDetailsUrl(API_BASE_URL, itemId);
+
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: buildServerBackendHeaders({ accessToken: options.accessToken }),
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        const errorBody = await response.text();
+        throw new Error(`itemDetails failed [${response.status}]: ${errorBody}`);
+      }
+
+      const result = await response.json();
+      const data = result.data;
+      const item = (Array.isArray(data) ? data[0] : data) as
+        | MenuItemDetail
+        | undefined;
+
+      if (item) {
+        const [stamped] = applyItemStamps([item]);
+        return stamped;
+      }
+    } catch (error) {
+      console.error("getMenuItemDetail:", error);
+    }
+
+    if (options.menuId) {
+      const items = await getMenuItemList(options.menuId);
+      const match = items.find((entry) => entry._id === itemId);
+      if (match) {
+        return match;
+      }
+    }
+
+    return null;
   },
 );
 
@@ -78,6 +124,8 @@ export const getFavoriteItemsList = cache(
     });
 
     const {data} = await response.json();    
-    return data.data.map((item: FavoriteItem) => item.itemDetails) ?? [];
+    return applyItemStamps(
+      data.data.map((item: FavoriteItem) => item.itemDetails) ?? [],
+    );
   },
 );

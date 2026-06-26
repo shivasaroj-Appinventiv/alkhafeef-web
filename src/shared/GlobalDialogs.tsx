@@ -10,8 +10,6 @@ export default function GLobalDialogs() {
     (state) => state.global.openConfirmationDialog,
   );
 
-  if (!open) return null;
-
   const handleConfirm = async () => {
     if (!onConfirm) return;
     await onConfirm();
@@ -24,6 +22,7 @@ export default function GLobalDialogs() {
 
   return (
     <ConfirmationDialog
+      open={open}
       message={message}
       onConfirm={handleConfirm}
       onCancel={handleCancel}

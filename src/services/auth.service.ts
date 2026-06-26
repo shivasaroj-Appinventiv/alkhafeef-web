@@ -1,4 +1,12 @@
-import { LoginOTPVerificationPayload, SendOtpPayload, SignupPayload } from "@/components/auth/auth.interface";
+import {
+  LoginOTPVerificationPayload,
+  SendEmailOtpPayload,
+  SendOtpPayload,
+  SignupPayload,
+  UpdateProfilePayload,
+  VerifyEmailOtpPayload,
+  VerifyProfileMobileOtpPayload,
+} from "@/components/auth/auth.interface";
 import { api, type ApiRequestConfig } from "@/lib/api/api";
 import { API_RSA_PUBLIC_KEY } from "@/lib/api/config";
 import { APP_ENDPOINTS, AUTH_ENDPOINTS } from "@/lib/api/endpoints";
@@ -42,6 +50,22 @@ export const authService = {
     );
   },
 
+  async sendEmailOtp(payload: SendEmailOtpPayload) {
+    return api.post(
+      AUTH_ENDPOINTS.SEND_EMAIL_OTP,
+      payload,
+      await this.buildAuthRequestConfig()
+    );
+  },
+
+  async verifyEmailOtp(payload: VerifyEmailOtpPayload) {
+    return api.post(AUTH_ENDPOINTS.VERIFY_EMAIL_OTP, payload);
+  },
+
+  async verifyProfileMobileOtp(payload: VerifyProfileMobileOtpPayload) {
+    return api.post(AUTH_ENDPOINTS.VERIFY_MOBILE_OTP, payload);
+  },
+
   async getUserProfile() {
     return api.get(AUTH_ENDPOINTS.PROFILE);
   },
@@ -58,5 +82,9 @@ export const authService = {
       payload,
       await this.buildAuthRequestConfig()
     );
+  },
+
+  async updateProfile(payload: UpdateProfilePayload) {
+    return api.put(AUTH_ENDPOINTS.UPDATE_PROFILE, payload);
   },
 };

@@ -15,6 +15,7 @@ import { RootState } from "@/redux/store";
 import { ServiceType, Store } from "@/types/location";
 import { X } from "lucide-react";
 import { useEffect } from "react";
+import AnimatedDialog from "@/components/common/AnimatedDialog";
 import StoreList from "./StoreList";
 import StoreMap from "./StoreMap";
 import StoreSearch from "./StoreSearch";
@@ -73,8 +74,6 @@ export default function LocationSelection() {
     );
   }, [dispatch, isLocationModalOpen, userCoords, debouncedSearchKey]);
 
-  if (!isLocationModalOpen) return null;
-
   const handleSelectStore = (store: Store) => {
     dispatch(selectStore(store));
 
@@ -93,47 +92,51 @@ export default function LocationSelection() {
   };
 
   return (
-    <div className="dialog-backdrop z-[998]">
-      <div className="relative flex h-[90vh] w-full max-w-6xl flex-col overflow-hidden rounded-3xl bg-[#F7F4EA] shadow-xl">
-        <button
-          type="button"
-          onClick={() => dispatch(closeLocationModal())}
-          className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-[#e53935] text-white cursor-pointer"
-          aria-label="Close"
-        >
-          <X size={20} />
-        </button>
+    <AnimatedDialog
+      open={isLocationModalOpen}
+      onClose={() => dispatch(closeLocationModal())}
+      closeOnBackdropClick={false}
+      backdropClassName="z-[998]"
+      panelClassName="relative flex h-[90vh] w-full max-w-6xl flex-col overflow-hidden rounded-3xl bg-[#F7F4EA] shadow-xl"
+    >
+      <button
+        type="button"
+        onClick={() => dispatch(closeLocationModal())}
+        className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-[#e53935] text-white cursor-pointer"
+        aria-label="Close"
+      >
+        <X size={20} />
+      </button>
 
-        <div className="border-b border-[#e7dfd2] px-6 py-5 text-center">
-          <h1 className="text-lg font-bold uppercase tracking-wide text-[#113d2d]">
-            Select a Store
-          </h1>
-        </div>
+      <div className="border-b border-[#e7dfd2] px-6 py-5 text-center">
+        <h1 className="text-lg font-bold uppercase tracking-wide text-[#113d2d]">
+          Select a Store
+        </h1>
+      </div>
 
-        <div className="px-6 py-4">
-          <StoreSearch value={searchQuery} onChange={handleSearch} />
-        </div>
+      <div className="px-6 py-4">
+        <StoreSearch value={searchQuery} onChange={handleSearch} />
+      </div>
 
-        <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 px-6 pb-6 lg:grid-cols-2">
-          <StoreList
+      <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 px-6 pb-6 lg:grid-cols-2">
+        <StoreList
+          stores={stores}
+          activeStoreId={activeStoreId}
+          activeServiceType={activeServiceType}
+          isLoading={isLoading}
+          onSelectStore={handleSelectStore}
+          onSelectService={handleSelectService}
+        />
+
+        <div className="min-h-[420px] overflow-hidden rounded-2xl">
+          <StoreMap
             stores={stores}
-            activeStoreId={activeStoreId}
-            activeServiceType={activeServiceType}
+            selectedStoreId={activeStoreId}
             isLoading={isLoading}
             onSelectStore={handleSelectStore}
-            onSelectService={handleSelectService}
           />
-
-          <div className="min-h-[420px] overflow-hidden rounded-2xl">
-            <StoreMap
-              stores={stores}
-              selectedStoreId={activeStoreId}
-              isLoading={isLoading}
-              onSelectStore={handleSelectStore}
-            />
-          </div>
         </div>
       </div>
-    </div>
+    </AnimatedDialog>
   );
 }

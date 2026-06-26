@@ -35,16 +35,21 @@ export const fetchCart = createAsyncThunk("cart/fetchCart", async () => {
 
 export const addMenuItemToCart = createAsyncThunk(
   "cart/addMenuItemToCart",
-  async (menuItem: MenuItem, { getState, dispatch }) => {
+  async (
+    arg: MenuItem | { menuItem: MenuItem; modGroups?: unknown[] },
+    { getState, dispatch },
+  ) => {
+    const menuItem = "menuItem" in arg ? arg.menuItem : arg;
+    const modGroups = "menuItem" in arg ? (arg.modGroups ?? []) : [];
     const state = getState() as RootState;
     const existing = selectCartLineByMenuItemId(state, menuItem._id);
 
-    if (existing) {
+    if (existing && modGroups.length === 0) {
       await dispatch(increaseCartItem(menuItem));
       return;
     }
 
-    const payload = buildAddToCartPayload(menuItem);
+    const payload = buildAddToCartPayload(menuItem, undefined, modGroups);
     await cartService.addToCart(payload);
     await dispatch(fetchCart());
   },
@@ -199,8 +204,13 @@ const cartSlice = createSlice({
 
 function getMenuItemIdFromThunkArg(arg: unknown) {
   if (typeof arg === "string") return null;
-  if (arg && typeof arg === "object" && "_id" in arg) {
-    return String((arg as MenuItem)._id);
+  if (arg && typeof arg === "object") {
+    if ("menuItem" in arg && arg.menuItem && typeof arg.menuItem === "object" && "_id" in arg.menuItem) {
+      return String((arg.menuItem as MenuItem)._id);
+    }
+    if ("_id" in arg) {
+      return String((arg as MenuItem)._id);
+    }
   }
   return null;
 }

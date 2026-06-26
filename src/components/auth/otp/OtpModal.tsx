@@ -3,27 +3,32 @@
 import OTPInput from "react-otp-input";
 import { Formik } from "formik";
 import { otpSchema } from "@/validations/auth.validation";
-import { useOtpVerification } from "./useOtpVerfication";
-
+import { useOtpModal } from "./useOtpModal";
 
 export default function OTPModal() {
-  const { verifyOtp, resendOtp, seconds, mobileNo, handleEditMobileNo } =
-    useOtpVerification();
+  const {
+    verifyOtp,
+    resendOtp,
+    seconds,
+    otpDestination,
+    isPhoneVerification,
+    countryCode,
+    handleEditDetails,
+    isProfileFlow,
+  } = useOtpModal();
 
   const minutes = Math.floor(seconds / 60);
-
   const remainingSeconds = seconds % 60;
 
   return (
     <Formik
-      initialValues={{
-        otp: "",
-      }}
+      key={`${isProfileFlow}-${isPhoneVerification}-${otpDestination}`}
+      initialValues={{ otp: "" }}
       validationSchema={otpSchema}
       onSubmit={(values, { setSubmitting }) =>
         verifyOtp(
           {
-            mobileNo,
+            mobileNo: otpDestination,
             mobileOtp: values.otp,
           },
           setSubmitting,
@@ -45,16 +50,22 @@ export default function OTPModal() {
 
           <div className="p-8">
             <p className="text-center text-gray-700 leading-7">
-              We have sent a one-time password (OTP) to your phone number
+              {isPhoneVerification
+                ? "We have sent a one-time password (OTP) to your phone number"
+                : "We have sent a one-time password (OTP) to your email address"}
             </p>
 
             <div className="mt-3 text-center">
-              <span className="text-xl font-semibold">+966-{mobileNo}</span>
+              <span className="text-xl font-semibold">
+                {isPhoneVerification
+                  ? `+${countryCode}-${otpDestination}`
+                  : otpDestination}
+              </span>
 
               <button
                 type="button"
-                onClick={handleEditMobileNo}
-                className="ml-2 text-orange-500 text-sm hover:underline cursor-pointer"
+                onClick={handleEditDetails}
+                className="ml-2 cursor-pointer text-sm text-orange-500 hover:underline"
               >
                 Edit
               </button>
@@ -62,29 +73,20 @@ export default function OTPModal() {
 
             <div className="mt-8 flex justify-center">
               <OTPInput
-              inputStyle={{
-                width: '3rem',
-                height: '3rem',
-                fontSize: '1.5rem',
-                borderRadius: '13px',
-                border: '1px solid rgba(0,0,0,0.3)',
-                background: 'white'
-              }}
+                inputStyle={{
+                  width: "3rem",
+                  height: "3rem",
+                  fontSize: "1.5rem",
+                  borderRadius: "13px",
+                  border: "1px solid rgba(0,0,0,0.3)",
+                  background: "white",
+                }}
                 value={values.otp}
                 onChange={(otp) => setFieldValue("otp", otp)}
                 numInputs={6}
                 shouldAutoFocus
-                renderInput={(props) => (
-                  <input
-                    {...props}
-                
-
-                  
-                  />
-                )}
-                containerStyle={{
-                  gap: "10px",
-                }}
+                renderInput={(props) => <input {...props} />}
+                containerStyle={{ gap: "10px" }}
               />
             </div>
 
@@ -97,19 +99,7 @@ export default function OTPModal() {
             <button
               type="submit"
               disabled={values.otp.length !== 6 || isSubmitting}
-              className="
-                mt-8
-                h-14
-                w-full
-                rounded-full
-                bg-[#f17022]
-                font-semibold
-                text-white
-                transition
-                cursor-pointer
-                disabled:opacity-50
-                disabled:cursor-not-allowed
-              "
+              className="mt-8 h-14 w-full rounded-full bg-[#f17022] font-semibold text-white transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isSubmitting ? "Verifying..." : "Verify"}
             </button>
@@ -126,12 +116,7 @@ export default function OTPModal() {
                 <button
                   type="button"
                   onClick={resendOtp}
-                  className="
-                    font-semibold
-                    text-orange-500
-                    hover:underline
-                    cursor-pointer
-                  "
+                  className="cursor-pointer font-semibold text-orange-500 hover:underline"
                 >
                   Resend OTP
                 </button>

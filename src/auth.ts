@@ -41,7 +41,7 @@ export const authConfig = {
     signIn: "/",
   },
   callbacks: {
-    async jwt({ token, user, trigger }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         token.accessToken = user.accessToken;
         token.user = {
@@ -54,17 +54,34 @@ export const authConfig = {
         } satisfies AppUser;
       }
 
-      if (trigger === "update" && typeof token.accessToken === "string") {
-        const profile = await fetchUserProfile(token.accessToken);
-        if (profile) {
+      if (trigger === "update") {
+        const currentUser = token.user as AppUser | undefined;
+        const sessionUser =
+          session &&
+          typeof session === "object" &&
+          "user" in session &&
+          session.user &&
+          typeof session.user === "object"
+            ? (session.user as Partial<AppUser>)
+            : undefined;
+
+        if (sessionUser && currentUser) {
           token.user = {
-            id: profile.id,
-            fullName: profile.fullName,
-            email: profile.email,
-            isEmailVerified: profile.isEmailVerified,
-            mobileNo: profile.mobileNo,
-            countryCode: profile.countryCode,
+            ...currentUser,
+            ...sessionUser,
           } satisfies AppUser;
+        } else if (typeof token.accessToken === "string") {
+          const profile = await fetchUserProfile(token.accessToken);
+          if (profile) {
+            token.user = {
+              id: profile.id,
+              fullName: profile.fullName,
+              email: profile.email,
+              isEmailVerified: profile.isEmailVerified,
+              mobileNo: profile.mobileNo,
+              countryCode: profile.countryCode,
+            } satisfies AppUser;
+          }
         }
       }
 

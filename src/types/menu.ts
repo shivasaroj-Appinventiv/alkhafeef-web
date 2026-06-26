@@ -61,6 +61,45 @@ export interface MenuItem {
   stampEndDate: number;
   stampFromTime: number;
   stampToTime: number;
+
+  stampName?: string;
+  stampNameAr?: string;
+  stampColorCode?: string;
+  isApplicable?: boolean;
+
+  thumbnailImage?: string | null;
+}
+
+export interface Modifier {
+  _id: string;
+  isAvailable: boolean;
+  maximum: number;
+  minimum: number;
+  modifierImageUrl: string;
+  nameArabic: string;
+  nameEnglish: string;
+  price: number;
+  sdmId: number;
+}
+
+export interface ModGroup {
+  _id: string;
+  isAvailable: boolean;
+  isRequired: boolean;
+  maximum: number;
+  minimum: number;
+  modGroupId: number;
+  modType: string;
+  modifiersId: string[];
+  title: string;
+  titleUn: string;
+  modifiers: Modifier[];
+}
+
+export interface MenuItemDetail extends MenuItem {
+  modGroups?: ModGroup[];
+  cartRefrences?: unknown;
+  status?: string;
 }
 
 export interface ExploreMenuOnHomeProps {

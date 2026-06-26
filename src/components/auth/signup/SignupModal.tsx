@@ -3,18 +3,28 @@
 import { Formik } from "formik";
 import { signupSchema } from "@/validations/auth.validation";
 import { useSignup } from "./useSignup";
-
+import { useAppSelector } from "@/redux/hooks";
+import ProfileEditForm from "./ProfileEditForm";
 
 export default function SignupModal() {
-  const { handleSubmit, initialValues, handlePhoneChange,handleSignin } = useSignup();
+  const { context } = useAppSelector((state) => state.authModal);
+  const { handleSubmit, initialValues, handlePhoneChange, handleSignin } =
+    useSignup();
+  const isEditMode = context === "profile";
 
+  if (isEditMode) {
+    return <ProfileEditForm />;
+  }
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={signupSchema}
       validateOnMount
-      onSubmit={ (values, { setSubmitting }) => handleSubmit(values, setSubmitting)}
+      enableReinitialize
+      onSubmit={(values, { setSubmitting }) =>
+        handleSubmit(values, setSubmitting)
+      }
     >
       {({
         values,
@@ -28,13 +38,9 @@ export default function SignupModal() {
         isValid,
       }) => (
         <form onSubmit={handleSubmit} className="p-6" noValidate>
-          {/* Heading */}
-
           <h2 className="text-center text-xl font-semibold text-gray-900">
             SIGN UP
           </h2>
-
-          {/* Name */}
 
           <div className="mt-6">
             <label
@@ -53,15 +59,13 @@ export default function SignupModal() {
               value={values.name}
               onChange={handleChange}
               onBlur={handleBlur}
-              className="h-14 w-full bg-white rounded-xl border border-gray-300 px-4 outline-none focus:border-orange-400"
+              className="h-14 w-full rounded-xl border border-gray-300 bg-white px-4 outline-none focus:border-orange-400"
             />
 
             {touched.name && errors.name && (
               <p className="mt-2 text-sm text-red-500">{errors.name}</p>
             )}
           </div>
-
-          {/* Email */}
 
           <div className="mt-4">
             <label
@@ -80,15 +84,13 @@ export default function SignupModal() {
               value={values.email}
               onChange={handleChange}
               onBlur={handleBlur}
-              className="h-14 w-full bg-white rounded-xl border border-gray-300 px-4 outline-none focus:border-orange-400"
+              className="h-14 w-full rounded-xl border border-gray-300 bg-white px-4 outline-none focus:border-orange-400"
             />
 
             {touched.email && errors.email && (
               <p className="mt-2 text-sm text-red-500">{errors.email}</p>
             )}
           </div>
-
-          {/* Phone */}
 
           <div className="mt-4">
             <label
@@ -99,7 +101,7 @@ export default function SignupModal() {
             </label>
 
             <div className="flex h-14 overflow-hidden rounded-xl border border-gray-300">
-              <div className="flex items-center border-r border-gray-200 px-4 font-medium text-gray-600 bg-white">
+              <div className="flex items-center border-r border-gray-200 bg-white px-4 font-medium text-gray-600">
                 +966
               </div>
 
@@ -115,7 +117,7 @@ export default function SignupModal() {
                 onChange={(e) =>
                   setFieldValue("phone", handlePhoneChange(e.target.value))
                 }
-                className="flex-1 px-4 outline-none bg-white"
+                className="flex-1 bg-white px-4 outline-none"
               />
             </div>
 
@@ -123,8 +125,6 @@ export default function SignupModal() {
               <p className="mt-2 text-sm text-red-500">{errors.phone}</p>
             )}
           </div>
-
-          {/* Button */}
 
           <button
             type="submit"
@@ -134,20 +134,16 @@ export default function SignupModal() {
             {isSubmitting ? "Creating Account..." : "Continue"}
           </button>
 
-          {/* Terms */}
-
           <p className="mt-5 text-center text-xs text-gray-500">
             By signing up, you agree to our{" "}
-            <span className="font-medium text-orange-500 cursor-pointer">
+            <span className="cursor-pointer font-medium text-orange-500">
               Terms of Use
             </span>{" "}
             and{" "}
-            <span className="font-medium text-orange-500 cursor-pointer">
+            <span className="cursor-pointer font-medium text-orange-500">
               Privacy Policy
             </span>
           </p>
-
-          {/* Sign In */}
 
           <div className="mt-6 text-center">
             <span className="text-sm text-gray-500">
@@ -157,7 +153,7 @@ export default function SignupModal() {
             <button
               type="button"
               onClick={handleSignin}
-              className="ml-2 text-sm font-semibold text-orange-500 hover:text-orange-600 cursor-pointer"
+              className="ml-2 cursor-pointer text-sm font-semibold text-orange-500 hover:text-orange-600"
             >
               Sign In
             </button>

@@ -69,9 +69,10 @@ export default function Cart() {
         </div>
       </div>
 
-      {isCouponModalOpen ? (
-        <ApplyCouponModal onClose={() => setIsCouponModalOpen(false)} />
-      ) : null}
+      <ApplyCouponModal
+        open={isCouponModalOpen}
+        onClose={() => setIsCouponModalOpen(false)}
+      />
     </>
   );
 }
