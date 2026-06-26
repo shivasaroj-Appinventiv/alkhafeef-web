@@ -73,10 +73,10 @@ export default function StoreCard({
                   e.stopPropagation();
                   onSelectService(service);
                 }}
-                className={`rounded-md px-3 py-1 text-xs font-medium cursor-pointer ${
+                className={`rounded-md border px-3 py-1 text-xs font-medium cursor-pointer ${
                   active
-                    ? "bg-[#f26a21] text-white"
-                    : "bg-[#f3eee4] text-gray-600"
+                    ? "border-[#f26a21] bg-transparent text-[#f26a21]"
+                    : "border-transparent bg-[#f3eee4] text-gray-600"
                 }`}
               >
                 {SERVICE_LABELS[service]}

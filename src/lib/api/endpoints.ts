@@ -6,6 +6,8 @@ export const API_V1 = {
   USER_PAYMENT: "/userPayment/api/v1",
 } as const;
 
+export const ADMIN_API_V1 = "/admins/api/v1";
+
 /** Auth / onboarding */
 export const AUTH_ENDPOINTS = {
   LOGIN: `${API_V1.USER_ONBOARD}/login`,
@@ -47,6 +49,11 @@ export const STORE_ENDPOINTS = {
   ITEM_DETAIL: `${API_V1.USER_STORE}/itemDetails`,
   FAVOURITE_ITEM_LIST: `${API_V1.USER_STORE}/favouriteItemList`,
   MY_STORE_LIST: `${API_V1.USER_STORE}/myStoreList`,
+} as const;
+
+/** CMS / static content pages */
+export const CONTENT_ENDPOINTS = {
+  DETAILS: `${ADMIN_API_V1}/content/details`,
 } as const;
 
 export function getItemDetailsUrl(baseUrl: string, itemId: string) {

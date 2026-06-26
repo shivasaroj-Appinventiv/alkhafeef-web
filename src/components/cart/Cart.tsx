@@ -14,6 +14,7 @@ import BillDetails from "./BillDetails";
 import CartLineItem from "./CartLineItem";
 import PickupDetails from "./PickupDetails";
 import PolicySection from "./PolicySection";
+import ItemGridSkeleton from "../common/skeletons/ItemGridSkeleton";
 
 export default function Cart() {
   const dispatch = useAppDispatch();
@@ -97,7 +98,7 @@ export function CartEmptyState() {
 export function CartLoadingState() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-10">
-      <p className="text-center text-gray-600">Loading your cart...</p>
+      <p className="text-center text-gray-600"> <ItemGridSkeleton/> </p>
     </div>
   );
 }
