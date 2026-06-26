@@ -45,7 +45,7 @@ export default function ExploreMenuOnHome({ menus }: ExploreMenuOnHomeProps) {
 
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           {visibleMenus.map((menu) => {
-            const menuImageSrc = menu.menuImageUrl?.trim();
+            const menuImageSrc = menu.menuImageUrl?.trim()||"/images/alkhafeef_logo.png";
 
             return (
             <Link key={menu._id} href={`/explore-menu/${menu._id}`}>

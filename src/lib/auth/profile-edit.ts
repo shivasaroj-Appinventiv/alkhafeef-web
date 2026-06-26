@@ -60,18 +60,34 @@ export async function sendProfilePhoneOtp(
   });
 }
 
-export async function sendProfileEmailOtp(
-  email: string,
-  getSecurityToken: (action: string) => Promise<string | null>,
-) {
-  const { authService } = await import("@/services/auth.service");
-  const token = await getSecurityToken("profile");
-  if (!token) {
-    throw new Error("Security verification failed. Please refresh and try again.");
+export function buildProfileUpdateRequestPayload({
+  name,
+  email,
+  nameChanged,
+  emailChanged,
+}: {
+  name: string;
+  email: string;
+  nameChanged: boolean;
+  emailChanged: boolean;
+}) {
+  if (emailChanged) {
+    return {
+      fullName: name.trim(),
+      email: normalizeEmail(email),
+    };
   }
 
-  await authService.sendEmailOtp({
-    email,
-    token,
-  });
+  if (nameChanged) {
+    return { fullName: name.trim() };
+  }
+
+  return {};
+}
+
+export async function requestProfileUpdateOtp(
+  updatePayload: ProfileEditDraft["updatePayload"],
+) {
+  const { authService } = await import("@/services/auth.service");
+  await authService.updateProfile(buildUpdateProfilePayload(updatePayload));
 }

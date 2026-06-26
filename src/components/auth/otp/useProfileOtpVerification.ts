@@ -15,7 +15,7 @@ import { useSecurityToken } from "@/utils/securityToken";
 import {
   buildUpdateProfilePayload,
   normalizeEmail,
-  sendProfileEmailOtp,
+  requestProfileUpdateOtp,
   sendProfilePhoneOtp,
 } from "@/lib/auth/profile-edit";
 
@@ -133,10 +133,7 @@ export function useProfileOtpVerification() {
           getSecurityToken,
         );
       } else if (isEmailVerification && profileEditDraft.updatePayload.email) {
-        await sendProfileEmailOtp(
-          normalizeEmail(profileEditDraft.updatePayload.email),
-          getSecurityToken,
-        );
+        await requestProfileUpdateOtp(profileEditDraft.updatePayload);
       }
 
       toastService.showToast("OTP resent successfully", "success");

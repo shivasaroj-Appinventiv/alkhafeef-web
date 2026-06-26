@@ -34,27 +34,15 @@ export default function Header({ lang = "en" }: HeaderProps) {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-4 py-4 lg:flex-row lg:items-center lg:justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 shrink-0">
-            <div className="flex h-12 w-12 items-center justify-center rounded-3xl bg-emerald-950 text-white shadow-sm">
-              <svg
-                viewBox="0 0 24 24"
-                className="h-6 w-6"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M12 3C9.5 5.5 8 8 8 10.5C8 14.5 11 17 12 20C13 17 16 14.5 16 10.5C16 8 14.5 5.5 12 3Z" />
-                <path d="M12 3C11.2 4.7 11 6.3 12 8C13 6.3 12.8 4.7 12 3Z" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-xs uppercase tracking-[0.28em] text-slate-500">
-                alkhafeef
-              </p>
-              <p className="text-sm font-semibold text-slate-900">ALKHAFEEF</p>
-            </div>
+          <Link href="/" className="flex shrink-0 items-center">
+            <Image
+              src="/svg/logo.svg"
+              alt="Alkhafeef"
+              width={58}
+              height={72}
+              className="h-12 w-auto"
+              priority
+            />
           </Link>
 
           {/* Search */}

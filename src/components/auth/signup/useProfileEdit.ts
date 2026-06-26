@@ -10,12 +10,11 @@ import { authService } from "@/services/auth.service";
 import { toastService } from "@/utils/toast.service";
 import { useRefreshProfileSession } from "@/hooks/useRefreshProfileSession";
 import { RootState } from "@/redux/store";
-import { useSecurityToken } from "@/utils/securityToken";
 import {
+  buildProfileUpdateRequestPayload,
   buildUpdateProfilePayload,
   hasProfileFormChanges,
-  normalizeEmail,
-  sendProfileEmailOtp,
+  requestProfileUpdateOtp,
 } from "@/lib/auth/profile-edit";
 
 interface ProfileFormValues {
@@ -27,7 +26,6 @@ interface ProfileFormValues {
 export function useProfileEdit() {
   const dispatch = useAppDispatch();
   const refreshProfileSession = useRefreshProfileSession();
-  const { getSecurityToken } = useSecurityToken();
   const { profilePrefill } = useAppSelector((state: RootState) => state.authModal);
 
   const initialValues: ProfileFormValues = {
@@ -53,16 +51,12 @@ export function useProfileEdit() {
   };
 
   const startEmailOtpFlow = async (values: ProfileFormValues) => {
-    const updatePayload: {
-      fullName?: string;
-      email?: string;
-    } = {
-      email: values.email.trim(),
-    };
-
-    if (values.name.trim() !== originalName.trim()) {
-      updatePayload.fullName = values.name.trim();
-    }
+    const updatePayload = buildProfileUpdateRequestPayload({
+      name: values.name,
+      email: values.email,
+      nameChanged: false,
+      emailChanged: true,
+    });
 
     dispatch(
       setProfileEditDraft({
@@ -73,10 +67,7 @@ export function useProfileEdit() {
       }),
     );
 
-    await sendProfileEmailOtp(
-      normalizeEmail(values.email),
-      getSecurityToken,
-    );
+    await requestProfileUpdateOtp(updatePayload);
     toastService.showToast("OTP sent to your email address", "success");
     dispatch(setProfileStep("OTP"));
   };

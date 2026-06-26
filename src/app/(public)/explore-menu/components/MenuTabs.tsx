@@ -68,7 +68,7 @@ export default function MenuTabs({ menus }: ExploreMenuOnHomeProps) {
       <div className="flex min-w-max gap-3 pb-2">
         {menus.map((menu) => {
           const active = menu._id === activeCategoryId;
-          const menuImageSrc = menu.menuImageUrl?.trim();
+          const menuImageSrc = menu.menuImageUrl?.trim()||"/images/alkhafeef_logo.png";
 
           return (
             <Link
