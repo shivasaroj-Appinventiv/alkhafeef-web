@@ -6,13 +6,13 @@ import OurStoreButton from "./OurStoreButton";
 const Footer = () => {
   return (
     <footer>
-      <div className="flex items-center justify-center bg-[#113d2d] bg-[url('/svg/second-header-bg.svg')] bg-cover bg-center px-4 py-10">
+      <div className="flex items-center justify-center bg-[#113d2d] bg-[url('/svg/second-header-bg.svg')] bg-cover bg-center px-2 py-5">
         <Image
           src="/svg/logo.svg"
           alt="Alkhafeef"
-          width={72}
-          height={90}
-          className="h-20 w-auto"
+          width={62}
+          height={80}
+          className="h-10 w-auto"
         />
       </div>
 

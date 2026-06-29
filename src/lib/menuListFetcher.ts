@@ -123,9 +123,18 @@ export const getFavoriteItemsList = cache(
       cache: "no-store",
     });
 
-    const {data} = await response.json();    
+    if (!response.ok) {
+      const errorBody = await response.text();
+      throw new Error(
+        `getFavoriteItemsList failed [${response.status}]: ${errorBody}`,
+      );
+    }
+
+    const result = await response.json();
+    const favorites = result.data?.data ?? [];
+
     return applyItemStamps(
-      data.data.map((item: FavoriteItem) => item.itemDetails) ?? [],
+      favorites.map((item: FavoriteItem) => item.itemDetails).filter(Boolean),
     );
   },
 );

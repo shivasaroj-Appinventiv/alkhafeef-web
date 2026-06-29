@@ -30,7 +30,7 @@ export default function Header({ lang = "en" }: HeaderProps) {
     useLocationSelection();
 
   return (
-    <header className="w-full bg-white border-b border-slate-200 sticky top-0 z-50">
+    <header className="w-full bg-white  border-slate-200 sticky top-0 z-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-4 py-4 lg:flex-row lg:items-center lg:justify-between">
           {/* Logo */}
@@ -123,7 +123,7 @@ export default function Header({ lang = "en" }: HeaderProps) {
         <div className="h-[1px] bg-slate-200 w-full"></div>
       </div>
 
-      <div className="flex items-center justify-center gap-3 bg-[#113d2d] bg-[url('/svg/second-header-bg.svg')] bg-cover bg-center px-4 py-5">
+      <div className="flex items-center justify-center gap-3 bg-[#113d2d] bg-[url('/svg/second-header-bg.svg')] bg-cover bg-center px-2 py-3">
         <Image
           src="/svg/pin-location.svg"
           alt="Location"

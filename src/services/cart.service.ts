@@ -1,6 +1,8 @@
 import { api, type ApiRequestConfig } from "@/lib/api/api";
 import { CART_ENDPOINTS } from "@/lib/api/endpoints";
+import type { CouponListApiResponse } from "@/types/payment";
 import type { AddToCartPayload, RemoveFromCartPayload, UpdateCartQuantityPayload } from "@/types/cart";
+import type { AxiosResponse } from "axios";
 
 const cartRequestConfig = {
   skipSignOutOn401: true,
@@ -24,5 +26,17 @@ export const cartService = {
 
   removeFromCart(payload: RemoveFromCartPayload) {
     return api.put(CART_ENDPOINTS.REMOVE, payload, cartRequestConfig);
+  },
+
+  getCouponList(
+    servicesAvailable: string,
+    isOptimized = true,
+  ): Promise<AxiosResponse<CouponListApiResponse>> {
+    return api.get(CART_ENDPOINTS.COUPON_LIST, {
+      params: {
+        servicesAvailable,
+        isOptimized,
+      },
+    });
   },
 };

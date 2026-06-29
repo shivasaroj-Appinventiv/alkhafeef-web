@@ -27,6 +27,7 @@ export const CART_ENDPOINTS = {
   ADD: `${API_V1.USER_CART}/addToCart`,
   UPDATE_QUANTITY: `${API_V1.USER_CART}/updateCartQantity`,
   REMOVE: `${API_V1.USER_CART}/removeCart`,
+  COUPON_LIST: `${API_V1.USER_CART}/couponList`,
 } as const;
 
 /** Wishlist / favourites */
@@ -38,6 +39,7 @@ export const WISHLIST_ENDPOINTS = {
 /** Payment / checkout */
 export const PAYMENT_ENDPOINTS = {
   VALIDATE_ORDER: `${API_V1.USER_PAYMENT}/validateOrder`,
+  CARDS: `${API_V1.USER_PAYMENT}/payments/cards`,
 } as const;
 
 /** Store — menus, banners, items */
