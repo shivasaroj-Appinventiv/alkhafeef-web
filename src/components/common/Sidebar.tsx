@@ -96,7 +96,7 @@ export default function Sidebar({ user: initialUser }: SidebarProps) {
   };
 
   return (
-    <aside className="w-[240px] flex-shrink-0 overflow-hidden rounded-[20px] bg-[#3d6358] text-white flex flex-col">
+    <aside className="w-[260px] flex-shrink-0 overflow-hidden rounded-[20px] bg-[#3d6358] text-white flex flex-col">
       <div className="p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -137,11 +137,10 @@ export default function Sidebar({ user: initialUser }: SidebarProps) {
               <Link
                 key={href}
                 href={href}
-                className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition ${
-                  active
-                    ? "bg-[#f26a21] text-white"
-                    : "text-white/85 hover:bg-white/10"
-                }`}
+                className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition ${active
+                  ? "bg-[#f26a21] text-white"
+                  : "text-white/85 hover:bg-white/10"
+                  }`}
               >
                 <Icon size={16} />
                 {label}

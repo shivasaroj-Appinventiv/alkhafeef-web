@@ -111,7 +111,7 @@ export default function OrdersPage() {
         </div>
       ) : activeTab === "active" ? (
         activeOrders.length > 0 ? (
-          <div className="space-y-5">
+          <div className="space-y-5 overflow-auto h-100">
             {activeOrders.map((order) => (
               <OrderCard
                 key={order._id}
@@ -131,7 +131,7 @@ export default function OrdersPage() {
         )
       ) : previousOrders.length > 0 ? (
         <div className="space-y-5">
-          <div className="space-y-4">
+          <div className="space-y-4 overflow-auto h-100">
             {previousOrders.map((order) => (
               <OrderCard
                 key={order._id}
