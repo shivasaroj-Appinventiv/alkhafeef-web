@@ -23,7 +23,7 @@ export const authService = {
       headers: {
         xValidation,
       },
-    } as ApiRequestConfig;
+    } as unknown as ApiRequestConfig;
   },
 
   async login(payload: {

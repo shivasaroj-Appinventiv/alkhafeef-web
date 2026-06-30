@@ -40,6 +40,7 @@ export const WISHLIST_ENDPOINTS = {
 export const PAYMENT_ENDPOINTS = {
   VALIDATE_ORDER: `${API_V1.USER_PAYMENT}/validateOrder`,
   CARDS: `${API_V1.USER_PAYMENT}/payments/cards`,
+  ACTIVE_PREVIOUS_ORDERS: `${API_V1.USER_PAYMENT}/activePreviousOrder`,
 } as const;
 
 /** Store — menus, banners, items */

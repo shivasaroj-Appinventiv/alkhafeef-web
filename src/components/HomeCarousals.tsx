@@ -5,6 +5,7 @@ import Autoplay from "embla-carousel-autoplay";
 import { useCallback, useEffect, useState } from "react";
 import { BannerData } from "@/types/banner";
 import Image from "next/image";
+import Link from "next/link";
 
 interface BannerCarouselProps {
   slides: BannerData[];
@@ -34,6 +35,7 @@ export default function HomeCarousels({ slides }: BannerCarouselProps) {
   }, [emblaApi]);
 
   const validSlides = slides.filter((slide) => slide.imageEnUrl?.trim());
+
   if (!validSlides.length) return null;
 
   return (
@@ -45,49 +47,52 @@ export default function HomeCarousels({ slides }: BannerCarouselProps) {
             const imageSrc = slide.imageEnUrl.trim();
 
             return (
-            <div
-              key={slide._id}
-              className="flex-[0_0_100%] min-w-0 relative overflow-hidden bg-[#e8c9b0]"
-              style={{ aspectRatio: "16/6.5" }}
-            >
-              {/* Full background image */}
+              <div
+                key={slide._id}
+                className="flex-[0_0_100%] min-w-0 relative overflow-hidden bg-[#e8c9b0]"
+                style={{ aspectRatio: "16/6.5" }}
+              >
+                {/* Full background image */}
 
-              <Image
-                src={imageSrc}
-                alt={slide.titleEnglish}
-                fill
-                className="absolute inset-0 w-full h-full object-cover"
-                draggable={false}
-              />
+                <Image
+                  src={imageSrc}
+                  alt={slide.titleEnglish}
+                  fill
+                  className="absolute inset-0 w-full h-full object-cover"
+                  draggable={false}
+                />
 
-              {/* Gradient overlay for text readability */}
-              <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
+                {/* Gradient overlay for text readability */}
+                <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
 
-              {/* Title + CTA */}
-              <div className="absolute left-6 top-1/2 -translate-y-1/2 z-10 max-w-xs">
-                <h2
-                  className="text-white font-black leading-tight tracking-tight"
-                  style={{ fontSize: "clamp(20px, 3.5vw, 48px)" }}
-                >
-                  {slide.titleEnglish}
-                </h2>
-                <button className="mt-4 flex items-center gap-2 text-white text-sm font-medium">
-                  <span>Order Now</span>
-                  <span className="w-8 h-8 rounded-full bg-white/20 border border-white/40 flex items-center justify-center">
-                    <svg
-                      width="12"
-                      height="12"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                    >
-                      <path d="M5 12h14M12 5l7 7-7 7" />
-                    </svg>
-                  </span>
-                </button>
+                {/* Title + CTA */}
+                <div className="absolute left-6 top-1/2 -translate-y-1/2 z-10 max-w-xs">
+                  <h2
+                    className="text-white font-black leading-tight tracking-tight"
+                    style={{ fontSize: "clamp(20px, 3.5vw, 48px)" }}
+                  >
+                    {slide.titleEnglish}
+                  </h2>
+                  <Link
+                    href={`/items/${slide.itemId}?menuId=${slide.categoryId}`}
+
+                    className="mt-4 flex items-center gap-2 text-white text-sm font-medium">
+                    <span>Order Now</span>
+                    <span className="w-8 h-8 rounded-full bg-white/20 border border-white/40 flex items-center justify-center">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                      >
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                      </svg>
+                    </span>
+                  </Link>
+                </div>
               </div>
-            </div>
             );
           })}
         </div>
@@ -101,9 +106,8 @@ export default function HomeCarousels({ slides }: BannerCarouselProps) {
             <button
               key={i}
               onClick={() => scrollTo(i)}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                i === selectedIndex ? "w-10 bg-[#e05c2a]" : "w-4 bg-gray-300"
-              }`}
+              className={`h-1.5 rounded-full transition-all duration-300 ${i === selectedIndex ? "w-10 bg-[#e05c2a]" : "w-4 bg-gray-300"
+                }`}
               aria-label={`Slide ${i + 1}`}
             />
           ))}
