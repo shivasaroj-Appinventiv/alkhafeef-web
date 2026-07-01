@@ -122,7 +122,7 @@ export default function HomeCarousels({ slides }: BannerCarouselProps) {
         {/* Arrows */}
         <button
           onClick={scrollPrev}
-          className="w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition"
+          className="w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition cursor-pointer"
         >
           <svg
             width="14"
@@ -137,7 +137,7 @@ export default function HomeCarousels({ slides }: BannerCarouselProps) {
         </button>
         <button
           onClick={scrollNext}
-          className="w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition"
+          className="w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition cursor-pointer"
         >
           <svg
             width="14"

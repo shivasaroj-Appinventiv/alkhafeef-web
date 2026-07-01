@@ -58,10 +58,10 @@ export const authConfig = {
         const currentUser = token.user as AppUser | undefined;
         const sessionUser =
           session &&
-          typeof session === "object" &&
-          "user" in session &&
-          session.user &&
-          typeof session.user === "object"
+            typeof session === "object" &&
+            "user" in session &&
+            session.user &&
+            typeof session.user === "object"
             ? (session.user as Partial<AppUser>)
             : undefined;
 
@@ -72,6 +72,8 @@ export const authConfig = {
           } satisfies AppUser;
         } else if (typeof token.accessToken === "string") {
           const profile = await fetchUserProfile(token.accessToken);
+          console.log(profile);
+
           if (profile) {
             token.user = {
               id: profile.id,
@@ -96,14 +98,14 @@ export const authConfig = {
           typeof token.accessToken === "string" ? token.accessToken : undefined,
         user: appUser
           ? {
-              ...session.user,
-              id: appUser.id,
-              fullName: appUser.fullName,
-              email: appUser.email,
-              isEmailVerified: appUser.isEmailVerified,
-              mobileNo: appUser.mobileNo,
-              countryCode: appUser.countryCode,
-            }
+            ...session.user,
+            id: appUser.id,
+            fullName: appUser.fullName,
+            email: appUser.email,
+            isEmailVerified: appUser.isEmailVerified,
+            mobileNo: appUser.mobileNo,
+            countryCode: appUser.countryCode,
+          }
           : session.user,
       };
     },

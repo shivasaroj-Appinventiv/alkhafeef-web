@@ -28,6 +28,10 @@ export const cartService = {
     return api.put(CART_ENDPOINTS.REMOVE, payload, cartRequestConfig);
   },
 
+  getGeneralSettings() {
+    return api.get(CART_ENDPOINTS.GENERAL_SETTINGS);
+  },
+
   getCouponList(
     servicesAvailable: string,
     isOptimized = true,

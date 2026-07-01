@@ -28,6 +28,7 @@ export const CART_ENDPOINTS = {
   UPDATE_QUANTITY: `${API_V1.USER_CART}/updateCartQantity`,
   REMOVE: `${API_V1.USER_CART}/removeCart`,
   COUPON_LIST: `${API_V1.USER_CART}/couponList`,
+  GENERAL_SETTINGS: `${API_V1.USER_CART}/generalSetting`
 } as const;
 
 /** Wishlist / favourites */
@@ -69,6 +70,12 @@ export const APP_ENDPOINTS = {
   BACKEND_PROXY: "/api/backend",
 } as const;
 
+
+// Notification
+
+export const NOTIFICATION_ENDPOINTS = {
+  SAVE_NOTIFICATION_SETTINGS: `${API_V1.USER_ONBOARD}/notificationSetting`,
+}
 
 
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { flushSync } from "react-dom";
 import { Loader2 } from "lucide-react";
 import AnimatedDialog from "@/components/common/AnimatedDialog";
@@ -19,6 +19,12 @@ const ConfirmationDialog = ({
   onCancel,
 }: ConfirmationProps) => {
   const [isConfirming, setIsConfirming] = useState(false);
+
+  useEffect(() => {
+    if (!open && isConfirming) {
+      setIsConfirming(false);
+    }
+  }, [open, isConfirming]);
 
   const handleConfirm = async () => {
     if (isConfirming) return;

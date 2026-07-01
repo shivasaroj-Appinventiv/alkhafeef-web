@@ -155,16 +155,20 @@ export default function Sidebar({ user: initialUser }: SidebarProps) {
       <div className="p-4">
         <h3 className="mb-3 text-base font-semibold">Control Center</h3>
         <nav className="flex flex-col gap-0.5">
-          {controlItems.map(({ label, href, icon: Icon }) => (
-            <Link
+          {controlItems.map(({ label, href, icon: Icon }) => {
+            const active = pathname === href;
+            return <Link
               key={href}
               href={href}
-              className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-white/85 transition hover:bg-white/10"
+              className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition ${active
+                ? "bg-[#f26a21] text-white"
+                : "text-white/85 hover:bg-white/10"
+                }`}
             >
               <Icon size={16} />
               {label}
             </Link>
-          ))}
+          })}
           <button
             type="button"
             onClick={onLogoutClick}

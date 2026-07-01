@@ -41,7 +41,6 @@ export function useLogin() {
     setSubmitting: (isSubmitting: boolean) => void,
   ) => {
     try {
-      debugger
       const token = await getSecurityToken("login");
 
       if (!token) {
